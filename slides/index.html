@@ -1,0 +1,3265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion de Projet — UML & Git | Formation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f1119;
+      --bg-card: #181b2e;
+      --bg-code: #131525;
+      --accent-blue: #3b82f6;
+      --accent-violet: #8b5cf6;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --text-primary: #e8eaf0;
+      --text-secondary: #8b92a8;
+      --text-dim: #4a5068;
+      --border-color: #252840;
+      --grid-color: #1a1d30;
+      --glow-blue: 0 0 20px rgba(59, 130, 246, 0.4);
+      --glow-violet: 0 0 20px rgba(139, 92, 246, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    /* Kanban-inspired background pattern */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px) 0 0 / 60px 60px,
+        linear-gradient(var(--grid-color) 1px, transparent 1px) 0 0 / 60px 60px;
+      opacity: 0.3;
+    }
+
+    .grid-accents {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .grid-accents::before {
+      content: '';
+      position: absolute;
+      top: 15%;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+      opacity: 0.08;
+      animation: line-pulse 5s ease-in-out infinite;
+    }
+
+    .grid-accents::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 25%;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent, var(--accent-violet), transparent);
+      opacity: 0.08;
+      animation: line-pulse 6s ease-in-out infinite 1.5s;
+    }
+
+    @keyframes line-pulse {
+      0%, 100% { opacity: 0.04; }
+      50% { opacity: 0.12; }
+    }
+
+    /* Header / Navigation */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: linear-gradient(180deg, var(--bg-dark) 0%, transparent 100%);
+      padding: 1rem 2rem;
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--accent-blue);
+      text-shadow: var(--glow-blue);
+      letter-spacing: 1px;
+    }
+
+    .logo span {
+      color: var(--text-dim);
+      font-weight: 400;
+    }
+
+    .day-nav {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .day-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.6rem 1.5rem;
+      background: transparent;
+      border: 2px solid var(--border-color);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.5px;
+    }
+
+    .day-btn:hover {
+      border-color: var(--accent-blue);
+      color: var(--text-primary);
+    }
+
+    .day-btn.active {
+      border-color: var(--accent-blue);
+      color: var(--bg-dark);
+      background: var(--accent-blue);
+      text-shadow: none;
+    }
+
+    .nav-controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .control-btn {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+    }
+
+    .control-btn.label {
+      width: auto;
+      min-width: 44px;
+      padding: 0.45rem 0.8rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+    }
+
+    .control-btn:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .control-btn.active {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: var(--bg-dark);
+    }
+
+    .control-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .control-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Main content area */
+    main {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-top: 80px;
+    }
+
+    /* Slide container */
+    .slides-wrapper {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 6rem;
+      opacity: 0;
+      transform: translateX(100px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .slide.prev {
+      transform: translateX(-100px);
+    }
+
+    .slide-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .slide-number {
+      display: none;
+    }
+
+    /* Typography */
+    .slide-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 2rem;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-blue) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .slide-title.title-hero {
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      text-align: center;
+      margin-bottom: 2.5rem;
+      background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-violet) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .slide-title.title-plan {
+      font-size: clamp(3.5rem, 8vw, 6rem);
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .slide-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--accent-amber);
+      margin: 2rem 0 1rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* Lists */
+    ul, ol {
+      list-style: none;
+      margin: 1.5rem 0;
+    }
+
+    li {
+      position: relative;
+      padding-left: 2.5rem;
+      margin-bottom: 1rem;
+      font-size: 1.6rem;
+      font-weight: 400;
+    }
+
+    li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.6em;
+      width: 8px;
+      height: 8px;
+      background: var(--accent-blue);
+      box-shadow: var(--glow-blue);
+      border-radius: 2px;
+    }
+
+    ol {
+      counter-reset: item;
+    }
+
+    ol li::before {
+      content: counter(item);
+      counter-increment: item;
+      background: transparent;
+      color: var(--accent-blue);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 600;
+      width: auto;
+      height: auto;
+      top: 0;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    /* Code blocks */
+    pre {
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      border-left: 3px solid var(--accent-emerald);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      overflow-x: auto;
+      position: relative;
+    }
+
+    pre::before {
+      content: 'CODE';
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--accent-emerald);
+      color: var(--bg-dark);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      letter-spacing: 1px;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+
+    p code, li code {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--accent-blue);
+      padding: 0.2rem 0.6rem;
+      font-size: 0.95em;
+      border-radius: 3px;
+    }
+
+    /* Syntax highlighting */
+    .keyword { color: var(--accent-violet); }
+    .type { color: var(--accent-blue); }
+    .function { color: var(--accent-amber); }
+    .string { color: var(--accent-emerald); }
+    .number { color: #ff7b72; }
+    .comment { color: var(--text-dim); font-style: italic; }
+
+    /* Cards / boxes */
+    .info-box {
+      background: rgba(59, 130, 246, 0.05);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      position: relative;
+      border-radius: 8px;
+    }
+
+    .info-box.warning {
+      background: rgba(245, 158, 11, 0.05);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .info-box.success {
+      background: rgba(16, 185, 129, 0.05);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .info-box.danger {
+      background: rgba(244, 63, 94, 0.05);
+      border-color: rgba(244, 63, 94, 0.3);
+    }
+
+    .info-box-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      letter-spacing: 1px;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .info-box p, .info-box li {
+      font-size: 1.4rem;
+    }
+
+    .info-box.warning .info-box-title { color: var(--accent-amber); }
+    .info-box.success .info-box-title { color: var(--accent-emerald); }
+    .info-box.danger .info-box-title { color: var(--accent-rose); }
+
+    /* Grid layouts */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .two-col p {
+      font-size: 1.5rem;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .four-col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    /* General paragraph */
+    .slide-content > p {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Hero slide */
+    .hero-slide {
+      text-align: center;
+    }
+
+    .hero-slide .author {
+      font-size: 1.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-slide .linkedin {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem;
+      color: var(--accent-blue);
+    }
+
+    .hero-slide .linkedin a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .hero-slide .linkedin a:hover {
+      text-decoration: underline;
+    }
+
+    /* Checklist */
+    .checklist li::before {
+      content: '\2713';
+      background: transparent;
+      color: var(--accent-emerald);
+      font-size: 1rem;
+      width: auto;
+      height: auto;
+      top: 0;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .crosslist li::before {
+      content: '\2717';
+      background: transparent;
+      color: var(--accent-rose);
+      font-size: 1rem;
+      width: auto;
+      height: auto;
+      top: 0;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    /* Status badges */
+    .badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-show { background: rgba(139, 92, 246, 0.2); color: var(--accent-violet); border: 1px solid rgba(139, 92, 246, 0.4); }
+    .badge-do { background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge-livrable { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); border: 1px solid rgba(59, 130, 246, 0.4); }
+
+    /* Kanban card */
+    .kanban-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.2rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .kanban-card:hover {
+      border-color: var(--accent-blue);
+    }
+
+    .kanban-card h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      margin-bottom: 0.5rem;
+    }
+
+    .kanban-card p {
+      font-size: 1rem !important;
+      color: var(--text-secondary);
+    }
+
+    /* Flow arrow */
+    .flow-arrow {
+      text-align: center;
+      font-size: 2rem;
+      color: var(--accent-violet);
+      padding: 0.5rem;
+    }
+
+    /* Speaker notes */
+    .speaker-notes {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(180deg, transparent, var(--bg-dark) 20%);
+      padding: 2rem 6rem;
+      transform: translateY(100%);
+      transition: transform 0.4s ease;
+      z-index: 50;
+    }
+
+    .speaker-notes.visible {
+      transform: translateY(0);
+    }
+
+    .speaker-notes-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+
+    .speaker-notes-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-amber);
+      letter-spacing: 2px;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .speaker-notes-text {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* TP panel */
+    .tp-panel {
+      position: fixed;
+      top: 80px;
+      right: 0;
+      bottom: 0;
+      width: min(520px, 92vw);
+      background: var(--bg-dark);
+      border-left: 1px solid var(--border-color);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 80;
+    }
+
+    .tp-panel.visible {
+      transform: translateX(0);
+    }
+
+    .tp-panel-content {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+    }
+
+    .tp-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      letter-spacing: 1px;
+    }
+
+    .tp-panel-actions {
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.7rem;
+    }
+
+    .tp-panel-actions a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .tp-panel-actions a:hover {
+      color: var(--accent-blue);
+      border-color: var(--accent-blue);
+    }
+
+    .tp-panel-body {
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+
+    .tp-panel-body h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      margin: 1rem 0 0.5rem;
+      color: var(--accent-amber);
+      letter-spacing: 0.5px;
+    }
+
+    .tp-panel-body h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      margin: 0.75rem 0 0.5rem;
+      color: var(--accent-blue);
+    }
+
+    .tp-panel-body p,
+    .tp-panel-body li {
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+
+    .tp-panel-body li {
+      padding-left: 1.5rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .tp-panel-body li::before {
+      width: 6px;
+      height: 6px;
+      top: 0.55em;
+    }
+
+    .tp-panel-body pre {
+      font-size: 0.95rem;
+    }
+
+    .tp-panel-empty {
+      font-size: 1rem;
+      color: var(--text-dim);
+    }
+
+    /* Progress bar */
+    .progress-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--border-color);
+      z-index: 60;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-violet));
+      box-shadow: var(--glow-blue);
+      transition: width 0.3s ease;
+    }
+
+    /* Navigation arrows */
+    .nav-arrows {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      display: flex;
+      gap: 0.5rem;
+      z-index: 70;
+    }
+
+    .nav-arrow {
+      width: 50px;
+      height: 50px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 6px;
+    }
+
+    .nav-arrow:hover {
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .nav-arrow:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .nav-arrow svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Slide counter */
+    .slide-counter {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      z-index: 70;
+    }
+
+    .slide-counter .current {
+      color: var(--accent-blue);
+      font-size: 1.2rem;
+    }
+
+    /* Animations */
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide.active .slide-number { animation: fade-up 0.5s ease 0.1s both; }
+    .slide.active .slide-title { animation: fade-up 0.5s ease 0.2s both; }
+    .slide.active .slide-subtitle { animation: fade-up 0.5s ease 0.3s both; }
+    .slide.active ul, .slide.active ol, .slide.active p, .slide.active pre, .slide.active .info-box {
+      animation: fade-up 0.5s ease 0.4s both;
+    }
+
+    /* Keyboard hint */
+    .keyboard-hint {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      z-index: 70;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .key {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 0.25rem 0.5rem;
+      font-size: 0.7rem;
+      border-radius: 3px;
+    }
+
+    /* Slide menu dropdown */
+    .slide-menu {
+      position: relative;
+    }
+
+    .slide-menu-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      min-width: 300px;
+      max-height: 400px;
+      overflow-y: auto;
+      display: none;
+      z-index: 200;
+    }
+
+    .slide-menu-dropdown.visible {
+      display: block;
+    }
+
+    .slide-menu-item {
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .slide-menu-item:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .slide-menu-item.active {
+      background: rgba(59, 130, 246, 0.2);
+      color: var(--accent-blue);
+    }
+
+    .slide-menu-item .slide-menu-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent-blue);
+      margin-right: 0.75rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .slide {
+        padding: 2rem 3rem;
+      }
+
+      .two-col {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .three-col {
+        grid-template-columns: 1fr;
+      }
+
+      .four-col {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .slide {
+        padding: 1.5rem;
+      }
+
+      .nav-container {
+        padding: 0.5rem 1rem;
+      }
+
+      .keyboard-hint {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+  <div class="grid-accents"></div>
+
+  <header>
+    <div class="nav-container">
+      <div class="logo">GDP<span>/NerdTickets</span></div>
+
+      <nav class="day-nav">
+        <button class="day-btn active" data-day="1">JOUR 1</button>
+        <button class="day-btn" data-day="2">JOUR 2</button>
+      </nav>
+
+      <div class="nav-controls">
+        <div class="slide-menu">
+          <button class="control-btn" id="menuBtn" title="Menu des slides">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div class="slide-menu-dropdown" id="slideMenu"></div>
+        </div>
+        <button class="control-btn label" id="tpBtn" title="Exercice (T)">TP</button>
+        <button class="control-btn label" id="assistBtn" title="Mode assistance (A)">AIDE</button>
+        <button class="control-btn" id="notesBtn" title="Notes orateur (N)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+          </svg>
+        </button>
+        <button class="control-btn" id="fullscreenBtn" title="Plein ecran (F)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <line x1="21" y1="3" x2="14" y2="10"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="slides-wrapper" id="slidesWrapper">
+
+      <!-- ==================== JOUR 1 ==================== -->
+      <!-- Du besoin -> Use-cases -> Repo collaboratif -->
+
+      <!-- J1.01 - Titre -->
+      <div class="slide" data-day="1" data-note="INTRO — Se presenter. Expliquer : 2 jours, 1 fil rouge = NerdTickets. J1 = cadrage projet, besoin et repo collaboratif. J2 = industrialiser (review, conflits, CI, release). Equipes avec roles tournants.">
+        <div class="slide-content hero-slide">
+          <span class="slide-number">J1.01</span>
+          <h1 class="slide-title title-hero">Gestion de Projet</h1>
+          <p class="slide-subtitle" style="text-align: center; margin-top: -1rem;">UML, Git & Collaboration</p>
+          <p class="author">Sion GENDERS</p>
+          <p class="linkedin"><a href="https://www.linkedin.com/in/sion-gdrs/" target="_blank">linkedin.com/in/sion-gdrs</a></p>
+        </div>
+      </div>
+
+      <!-- J1.02 - Fil rouge -->
+      <div class="slide" data-day="1" data-note="FIL ROUGE — Presenter NerdTickets : un mini-produit de tickets. Assez riche pour UML (acteurs, use cases, sequences) et parfait pour Git (issues/PR/reviews/conflits). Montrer que tout ce qu'on produit vit dans le repo.">
+        <div class="slide-content">
+          <span class="slide-number">J1.02</span>
+          <h1 class="slide-title">Fil rouge : NerdTickets</h1>
+          <div class="two-col">
+            <div>
+              <p>Une app de gestion de tickets :</p>
+              <ul>
+                <li>Creer des tickets</li>
+                <li>Assigner a un membre</li>
+                <li>Suivre un statut</li>
+                <li>Commenter</li>
+                <li>Exporter un recap</li>
+              </ul>
+            </div>
+            <div>
+              <div class="info-box">
+                <div class="info-box-title">REGLE D'OR</div>
+                <p>Tout ce qui est produit (use cases, diagrammes, regles) <strong>vit dans le repo</strong>.</p>
+              </div>
+              <div class="info-box warning" style="margin-top: 1rem;">
+                <div class="info-box-title">EQUIPES</div>
+                <p>Roles tournants : PM/Analyste, Dev A, Dev B, Reviewer/Release.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.03 - Plan du jour -->
+      <div class="slide" data-day="1" data-note="PLAN — Derouler rapidement les blocs. Insister : chaque bloc produit un livrable concret (PR mergee). La retro de fin permet d'ajuster les regles pour le J2.">
+        <div class="slide-content" style="text-align: center;">
+          <span class="slide-number">J1.03</span>
+          <h1 class="slide-title title-plan">Jour 1</h1>
+          <ol style="display: inline-block; text-align: left;">
+            <li>Piliers GP : cadrage, priorisation, risques</li>
+            <li>Mise en place du repo</li>
+            <li>Vision & perimetre</li>
+            <li>Use cases</li>
+            <li>UML "utile"</li>
+            <li>Collaboration Git</li>
+            <li>Mini retro</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- GP.01 - Piliers gestion de projet -->
+      <div class="slide" data-day="1" data-note="COURS — Poser les piliers de gestion de projet utilises pendant toute la formation. L'objectif est d'avoir un cadre de pilotage simple et actionnable par equipe.">
+        <div class="slide-content">
+          <span class="slide-number">GP.01</span>
+          <h1 class="slide-title">Piliers GP</h1>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>5 piliers a tenir</h3>
+              <ol>
+                <li><strong>Cadrage</strong> : pourquoi, pour qui, perimetre</li>
+                <li><strong>Priorisation</strong> : ce qui passe avant</li>
+                <li><strong>Planification</strong> : quoi cette semaine</li>
+                <li><strong>Risques</strong> : ce qui peut bloquer</li>
+                <li><strong>Suivi</strong> : decisions et avancement visibles</li>
+              </ol>
+            </div>
+            <div>
+              <h3>Question directrice</h3>
+              <ul class="checklist">
+                <li>Est-ce que l'equipe sait ce qu'on fait <strong>maintenant</strong> ?</li>
+                <li>Est-ce qu'on sait ce qui est <strong>important</strong> ?</li>
+                <li>Est-ce qu'on anticipe les <strong>blocages</strong> ?</li>
+              </ul>
+              <div class="info-box success" style="margin-top: 1rem;">
+                <div class="info-box-title">REGLE SIMPLE</div>
+                <p>Pas de pilotage flou : chaque decision doit produire un artefact dans le repo.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GP.02 - Cadrage et priorisation -->
+      <div class="slide" data-day="1" data-note="COURS — Donner une methode de cadrage et priorisation legere. Ce cadre sert avant d'ouvrir des issues et de lancer les PR.">
+        <div class="slide-content">
+          <span class="slide-number">GP.02</span>
+          <h1 class="slide-title">Cadrage & Priorisation</h1>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Cadrage minimal</h3>
+              <ul>
+                <li>Vision en 1 phrase</li>
+                <li>3 objectifs et 3 non-objectifs</li>
+                <li>Definition of Done claire</li>
+              </ul>
+              <h3 style="margin-top: 1.2rem;">Priorisation rapide</h3>
+              <ul>
+                <li><strong>Must</strong> : indispensable a la demo</li>
+                <li><strong>Should</strong> : utile si temps disponible</li>
+                <li><strong>Could</strong> : bonus</li>
+              </ul>
+            </div>
+            <div>
+              <pre style="font-size: 0.85rem;"><code>Backlog v0 (exemple)
+MUST   - Creer ticket
+MUST   - Assigner ticket
+SHOULD - Commenter ticket
+COULD  - Export recap
+
+Definition of Done
+- Issue liee
+- PR relue
+- Doc mise a jour</code></pre>
+              <div class="info-box warning" style="margin-top: 1rem;">
+                <div class="info-box-title">ANTI-PATTERN</div>
+                <p>Tout demarrer en parallele sans ordre de priorite = retard garanti.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GP.03 - Planification legere et risques -->
+      <div class="slide" data-day="1" data-note="COURS — Introduire une planification legere et la gestion des risques. Objectif: garder le rythme, detecter vite les blocages, et decider rapidement.">
+        <div class="slide-content">
+          <span class="slide-number">GP.03</span>
+          <h1 class="slide-title">Planification & Risques</h1>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Planification legere</h3>
+              <ol>
+                <li>Choisir 2-3 objectifs pour la sequence</li>
+                <li>Transformer en issues actionnables</li>
+                <li>Fixer un responsable par issue</li>
+                <li>Revue d'avancement courte et reguliere</li>
+              </ol>
+              <div class="info-box" style="margin-top: 1rem;">
+                <div class="info-box-title">CADENCE</div>
+                <p>Un point de 10 minutes vaut mieux qu'une reunion de 1 heure trop tard.</p>
+              </div>
+            </div>
+            <div>
+              <h3>Registre des risques (simple)</h3>
+              <pre style="font-size: 0.82rem;"><code>Risque: specs floues
+Probabilite: haute
+Impact: fort
+Signal: retours contradictoires
+Action: valider DoD avant dev
+
+Risque: conflit long sur main
+Probabilite: moyenne
+Impact: fort
+Action: PR plus petites</code></pre>
+              <div class="info-box success" style="margin-top: 1rem;">
+                <div class="info-box-title">RESULTAT ATTENDU</div>
+                <p>Moins de surprises, plus de decisions explicites, execution plus fluide.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.04 - Mise en place -->
+      <div class="slide" data-day="1" data-note="MISE EN PLACE — DO immediat. Distribuer le lien du repo template (ou repo vide). Chaque equipe fork/clone. Verifier la structure. Premier commit 'init'. Objectif : tout le monde a un repo fonctionnel en 15 min." data-exercise="../exercises/00-mise-en-place.md">
+        <div class="slide-content">
+          <span class="slide-number">J1.04</span>
+          <h1 class="slide-title">Mise en place</h1>
+          <p><span class="badge badge-do">DO</span></p>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Structure du repo</h3>
+              <pre><code>/docs/vision.md
+/docs/use-cases/
+/uml/
+.github/pull_request_template.md
+README.md</code></pre>
+            </div>
+            <div>
+              <h3>A faire</h3>
+              <ul>
+                <li>Fork / clone le repo</li>
+                <li>Verifier la structure</li>
+                <li>Premier commit <code>init</code></li>
+              </ul>
+              <div class="info-box success" style="margin-top: 1rem;">
+                <div class="info-box-title">LIVRABLE</div>
+                <p>1 commit initial + repo pret</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.05 - Vision SHOW -->
+      <div class="slide" data-day="1" data-note="SHOW — Ecrire en live une vision en 8 lignes + 3 non-objectifs. Montrer que c'est rapide et utile : ca cadre le projet, ca evite le scope creep. Exemple NerdTickets : 'Permettre a une equipe de gerer ses tickets sans quitter son workflow Git'.">
+        <div class="slide-content">
+          <span class="slide-number">J1.05</span>
+          <h1 class="slide-title">Vision & perimetre</h1>
+          <p><span class="badge badge-show">SHOW</span></p>
+          <div class="two-col" style="margin-top: 1.5rem;">
+            <div>
+              <h3>Vision (1 phrase)</h3>
+              <div class="info-box" style="margin-top: 0.5rem;">
+                <p>"NerdTickets permet a une equipe de gerer ses tickets de dev sans quitter son workflow Git."</p>
+              </div>
+              <h3>3 objectifs</h3>
+              <ol>
+                <li>Creer et assigner des tickets</li>
+                <li>Suivre les statuts (open / in-progress / done)</li>
+                <li>Commenter et exporter un recap</li>
+              </ol>
+            </div>
+            <div>
+              <h3>3 non-objectifs</h3>
+              <ul class="crosslist">
+                <li>Pas de notifications temps reel</li>
+                <li>Pas d'integration Slack/Discord</li>
+                <li>Pas de gestion de sprints</li>
+              </ul>
+              <h3>2 personas</h3>
+              <ul>
+                <li><strong>Alice</strong> — Dev frontend, veut voir ses tickets vite</li>
+                <li><strong>Bob</strong> — Tech Lead, veut la vue d'ensemble</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.06 - Vision DO -->
+      <div class="slide" data-day="1" data-note="DO — Par equipe. Ecrire dans docs/vision.md : 1 phrase vision, 3 objectifs, 3 non-objectifs, 2 personas courts. PR #1 avec review obligatoire. Circuler pour debloquer." data-exercise="../exercises/01-vision-personas.md">
+        <div class="slide-content">
+          <span class="slide-number">J1.06</span>
+          <h1 class="slide-title">A vous : Vision + Personas</h1>
+          <p><span class="badge badge-do">DO</span></p>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Par equipe</h3>
+              <ol>
+                <li>1 phrase <strong>vision</strong></li>
+                <li>3 <strong>objectifs</strong></li>
+                <li>3 <strong>non-objectifs</strong></li>
+                <li>2 <strong>personas</strong> (tres courts)</li>
+              </ol>
+            </div>
+            <div>
+              <div class="info-box success">
+                <div class="info-box-title">LIVRABLE</div>
+                <p>PR #1 "Vision + Personas"</p>
+                <p style="font-size: 1.1rem; margin-top: 0.5rem;">Review obligatoire par une autre equipe si possible.</p>
+              </div>
+              <div class="info-box warning" style="margin-top: 1rem;">
+                <div class="info-box-title">FICHIER</div>
+                <p><code>docs/vision.md</code></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.07 - Use cases SHOW -->
+      <div class="slide" data-day="1" data-note="SHOW — Prendre le besoin 'Creer un ticket'. Construire en live : Acteurs -> but -> scenarios (happy path + 2 exceptions). Montrer le template. Insister : un use case decrit le QUOI, pas le COMMENT technique.">
+        <div class="slide-content">
+          <span class="slide-number">J1.07</span>
+          <h1 class="slide-title">Use Cases</h1>
+          <p><span class="badge badge-show">SHOW</span></p>
+          <div class="two-col" style="margin-top: 1.5rem;">
+            <div>
+              <h3>Besoin : "Creer un ticket"</h3>
+              <ul>
+                <li><strong>Acteur :</strong> Utilisateur (membre equipe)</li>
+                <li><strong>But :</strong> Creer un ticket avec titre + priorite</li>
+                <li><strong>Happy path :</strong> formulaire -> saisie -> validation -> ticket cree</li>
+              </ul>
+              <h3 style="margin-top: 1.5rem;">Exceptions</h3>
+              <ul>
+                <li>Titre vide -> erreur "Titre obligatoire"</li>
+                <li>Erreur serveur -> "Reessayez plus tard"</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Template Use Case</h3>
+              <pre style="font-size: 0.9rem;"><code>ID / Nom
+Acteurs
+But
+Preconditions
+Declencheur
+Scenario nominal (1...n)
+Extensions / erreurs
+Postconditions
+Notes / regles metier</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.08 - Use case mal ecrit -->
+      <div class="slide" data-day="1" data-note="ASTUCE SHOW/DO — Montrer un use case volontairement mal ecrit : trop technique, ambigu, melange plusieurs actions. Puis faire le refactor en live. Ca ancre ce qu'est un BON use case par contraste.">
+        <div class="slide-content">
+          <span class="slide-number">J1.08</span>
+          <h1 class="slide-title">Use case : avant / apres</h1>
+          <div class="two-col">
+            <div>
+              <div class="info-box danger">
+                <div class="info-box-title">AVANT (mal ecrit)</div>
+                <p style="font-size: 1.2rem;">"Le systeme fait un POST /api/tickets avec un JSON qui contient title et priority, valide le schema, insere en base et renvoie un 201."</p>
+                <ul style="margin-top: 1rem;">
+                  <li>Trop technique (HTTP, JSON, SQL)</li>
+                  <li>Pas d'acteur visible</li>
+                  <li>Pas de scenario utilisateur</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div class="info-box success">
+                <div class="info-box-title">APRES (refacto)</div>
+                <p style="font-size: 1.2rem;">"L'utilisateur cree un nouveau ticket en saisissant un titre et une priorite. Le systeme confirme la creation."</p>
+                <ul style="margin-top: 1rem;">
+                  <li>Acteur clair (Utilisateur)</li>
+                  <li>Action metier (creer un ticket)</li>
+                  <li>Resultat observable (confirmation)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.09 - Use cases DO -->
+      <div class="slide" data-day="1" data-note="DO — Par equipe : ecrire 6 use cases format texte. Choisir 2 critiques et les detailler (preconditions, declencheur, scenario nominal, alternatives, postconditions). Circuler pour verifier que les UC ne sont pas trop techniques." data-exercise="../exercises/02-use-cases.md">
+        <div class="slide-content">
+          <span class="slide-number">J1.09</span>
+          <h1 class="slide-title">A vous : Use Cases</h1>
+          <p><span class="badge badge-do">DO</span></p>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Phase 1</h3>
+              <p>Ecrire <strong>6 use cases</strong> (format court)</p>
+              <h3>Phase 2</h3>
+              <p>Detailler <strong>2 use cases critiques</strong> :</p>
+              <ol>
+                <li>Preconditions</li>
+                <li>Declencheur</li>
+                <li>Scenario nominal</li>
+                <li>Alternatives / erreurs</li>
+                <li>Postconditions</li>
+              </ol>
+            </div>
+            <div>
+              <div class="info-box success">
+                <div class="info-box-title">LIVRABLE</div>
+                <p>PR #2 "Use-cases v1" (avec review)</p>
+              </div>
+              <div class="info-box warning" style="margin-top: 1rem;">
+                <div class="info-box-title">FICHIERS</div>
+                <p><code>docs/use-cases/UC-01.md</code></p>
+                <p><code>docs/use-cases/UC-02.md</code></p>
+                <p style="font-size: 1.1rem; margin-top: 0.3rem;">... un fichier par use case</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== UML : COURS + PRATIQUE ========== -->
+
+      <!-- Section title: UML -->
+      <div class="slide" data-day="1" data-note="TRANSITION — Marquer le changement de bloc. On passe du besoin (texte) a la modelisation (visuel). Laisser 5 sec pour que la transition soit claire.">
+        <div class="slide-content hero-slide">
+          <span class="slide-number" style="opacity: 0.3;">Partie 2</span>
+          <h1 class="slide-title title-hero" style="font-size: 3.5rem;">UML</h1>
+          <p class="slide-subtitle" style="text-align: center; margin-top: -0.5rem;">Modeliser pour mieux communiquer</p>
+          <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
+            <span class="badge" style="background: rgba(139,92,246,0.2); color: var(--accent-violet); border: 1px solid rgba(139,92,246,0.4); font-size: 1rem; padding: 0.4rem 1rem;">Use Case</span>
+            <span class="badge" style="background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.4); font-size: 1rem; padding: 0.4rem 1rem;">Sequence</span>
+            <span class="badge" style="background: rgba(245,158,11,0.2); color: var(--accent-amber); border: 1px solid rgba(245,158,11,0.4); font-size: 1rem; padding: 0.4rem 1rem;">Etat</span>
+            <span class="badge" style="background: rgba(16,185,129,0.2); color: var(--accent-emerald); border: 1px solid rgba(16,185,129,0.4); font-size: 1rem; padding: 0.4rem 1rem;">Classes</span>
+            <span class="badge" style="background: rgba(244,63,94,0.2); color: var(--accent-rose); border: 1px solid rgba(244,63,94,0.4); font-size: 1rem; padding: 0.4rem 1rem;">Activite</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.10 - UML : C'est quoi -->
+      <div class="slide" data-day="1" data-note="COURS — Poser les bases : UML = langage visuel standardise pour modeliser un systeme. Pas du code, pas un outil. Un vocabulaire commun. Ne en 1997 chez Rational (Booch, Rumbaugh, Jacobson). Aujourd'hui norme ISO/IEC 19505.">
+        <div class="slide-content">
+          <span class="slide-number">J1.10</span>
+          <h1 class="slide-title">UML : c'est quoi ?</h1>
+          <div class="two-col">
+            <div>
+              <p><strong>Unified Modeling Language</strong></p>
+              <p>Un langage <strong>visuel</strong> et <strong>standardise</strong> pour decrire, concevoir et documenter un systeme logiciel.</p>
+              <ul style="margin-top: 1.5rem;">
+                <li>Ne en <strong>1997</strong> (Booch + Rumbaugh + Jacobson)</li>
+                <li>Norme ISO/IEC 19505</li>
+                <li>Version actuelle : <strong>UML 2.5</strong></li>
+              </ul>
+            </div>
+            <div>
+              <div class="info-box">
+                <div class="info-box-title">CE QUE C'EST</div>
+                <p>Un <strong>vocabulaire commun</strong> pour que toute l'equipe parle la meme langue.</p>
+              </div>
+              <div class="info-box danger" style="margin-top: 1rem;">
+                <div class="info-box-title">CE QUE CE N'EST PAS</div>
+                <p>Ni du code, ni un outil, ni une methode de gestion de projet.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.11 - Les 2 familles de diagrammes -->
+      <div class="slide" data-day="1" data-note="COURS — UML definit 14 types de diagrammes, regroupes en 2 familles : structure (ce que le systeme EST) et comportement (ce que le systeme FAIT). On ne les utilise pas tous. On choisit ceux qui repondent a une question.">
+        <div class="slide-content">
+          <span class="slide-number">J1.11</span>
+          <h1 class="slide-title">14 diagrammes, 2 familles</h1>
+          <div class="two-col" style="margin-top: 1.5rem;">
+            <div>
+              <div class="info-box" style="border-color: rgba(59,130,246,0.4);">
+                <div class="info-box-title" style="color: var(--accent-blue);">STRUCTURE (ce que le systeme EST)</div>
+                <ul>
+                  <li><strong>Classes</strong> — objets et relations</li>
+                  <li><strong>Objets</strong> — instances concretes</li>
+                  <li><strong>Composants</strong> — modules du systeme</li>
+                  <li><strong>Deploiement</strong> — infra physique</li>
+                  <li><strong>Paquetages</strong> — organisation logique</li>
+                  <li>Profils, Structures composites</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div class="info-box" style="border-color: rgba(139,92,246,0.4);">
+                <div class="info-box-title" style="color: var(--accent-violet);">COMPORTEMENT (ce que le systeme FAIT)</div>
+                <ul>
+                  <li><strong>Use Case</strong> — qui fait quoi</li>
+                  <li><strong>Activite</strong> — workflow / processus</li>
+                  <li><strong>Etat</strong> — cycle de vie d'un objet</li>
+                  <li><strong>Sequence</strong> — interactions dans le temps</li>
+                  <li><strong>Communication</strong> — echanges entre objets</li>
+                  <li>Timing, Vue d'ensemble</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="info-box warning" style="margin-top: 1.5rem;">
+            <div class="info-box-title">REGLE PRAGMATIQUE</div>
+            <p>On ne fait <strong>jamais</strong> les 14. On choisit ceux qui repondent a une <strong>question concrete</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.12 - Les 4 diagrammes utiles -->
+      <div class="slide" data-day="1" data-note="COURS — Sur les 14, on en utilise 4 au quotidien dans un projet web/mobile classique. Les presenter avec la question a laquelle chacun repond. C'est le fil conducteur : chaque diagramme repond a un BESOIN.">
+        <div class="slide-content">
+          <span class="slide-number">J1.12</span>
+          <h1 class="slide-title">Les 4 qui comptent</h1>
+          <p>Chaque diagramme repond a <strong>une question</strong>.</p>
+          <div class="four-col" style="margin-top: 2rem;">
+            <div class="kanban-card">
+              <h4 style="color: var(--accent-blue);">Use Case</h4>
+              <p><strong>Qui</strong> fait <strong>quoi</strong> ?</p>
+              <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">Acteurs, fonctionnalites, perimetre</p>
+            </div>
+            <div class="kanban-card">
+              <h4 style="color: var(--accent-violet);">Sequence</h4>
+              <p><strong>Comment</strong> ca se passe ?</p>
+              <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">Interactions, ordre, messages</p>
+            </div>
+            <div class="kanban-card">
+              <h4 style="color: var(--accent-amber);">Etat</h4>
+              <p>Quels <strong>etats</strong> possibles ?</p>
+              <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">Cycle de vie, transitions, regles</p>
+            </div>
+            <div class="kanban-card">
+              <h4 style="color: var(--accent-emerald);">Classes</h4>
+              <p><strong>Quoi</strong> dans le systeme ?</p>
+              <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">Objets, attributs, relations</p>
+            </div>
+          </div>
+          <div class="info-box success" style="margin-top: 2rem;">
+            <div class="info-box-title">AUJOURD'HUI</div>
+            <p>On pratique les 3 premiers sur NerdTickets. Le diagramme de classes sera utile quand on codera.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.13 - Diagramme Use Case : cours -->
+      <div class="slide" data-day="1" data-note="COURS — Le diagramme Use Case est le plus simple et le plus utile en debut de projet. Il repond a 'Qui fait quoi ?'. Elements : acteurs (bonshommes), use cases (ellipses), systeme (rectangle), relations (lignes). Montrer include/extend brievement.">
+        <div class="slide-content">
+          <span class="slide-number">J1.13</span>
+          <h1 class="slide-title">Diag. Use Case</h1>
+          <div class="two-col">
+            <div>
+              <h3>Elements</h3>
+              <ul>
+                <li><strong>Acteur</strong> (bonhomme) : qui utilise le systeme</li>
+                <li><strong>Use case</strong> (ellipse) : une fonctionnalite</li>
+                <li><strong>Systeme</strong> (rectangle) : le perimetre</li>
+                <li><strong>Association</strong> (trait) : qui utilise quoi</li>
+              </ul>
+              <h3 style="margin-top: 1.5rem;">Relations avancees</h3>
+              <ul>
+                <li><code>&lt;&lt;include&gt;&gt;</code> : UC obligatoirement inclus</li>
+                <li><code>&lt;&lt;extend&gt;&gt;</code> : UC optionnel</li>
+                <li>Generalisation : acteur herite d'un autre</li>
+              </ul>
+            </div>
+            <div>
+              <pre style="font-size: 0.8rem;"><code>@startuml
+left to right direction
+actor Utilisateur as U
+actor Admin as A
+
+rectangle NerdTickets {
+  usecase "Creer ticket" as UC1
+  usecase "Assigner" as UC2
+  usecase "Commenter" as UC4
+  usecase "Exporter" as UC5
+  usecase "S'authentifier" as Auth
+
+  UC1 ..> Auth : &lt;&lt;include&gt;&gt;
+  UC5 ..> UC1 : &lt;&lt;extend&gt;&gt;
+}
+
+U --> UC1
+U --> UC2
+U --> UC4
+A --> UC5
+@enduml</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.14 - Diagramme de Sequence : cours -->
+      <div class="slide" data-day="1" data-note="COURS — Le diagramme de sequence montre les interactions entre composants DANS LE TEMPS (de haut en bas). Elements : participants (rectangles en haut), lignes de vie (pointilles), messages (fleches), retours (fleches pointillees). Fragments : alt, opt, loop.">
+        <div class="slide-content">
+          <span class="slide-number">J1.14</span>
+          <h1 class="slide-title">Diag. de Sequence</h1>
+          <div class="two-col">
+            <div>
+              <h3>Elements</h3>
+              <ul>
+                <li><strong>Participant</strong> : un composant (acteur, UI, API, DB...)</li>
+                <li><strong>Ligne de vie</strong> : duree d'existence (pointille vertical)</li>
+                <li><strong>Message</strong> : appel (fleche pleine -&gt;)</li>
+                <li><strong>Retour</strong> : reponse (fleche pointillee --&gt;)</li>
+              </ul>
+              <h3 style="margin-top: 1rem;">Fragments</h3>
+              <ul>
+                <li><code>alt</code> — si / sinon (branchement)</li>
+                <li><code>opt</code> — optionnel</li>
+                <li><code>loop</code> — repetition</li>
+              </ul>
+            </div>
+            <div>
+              <pre style="font-size: 0.78rem;"><code>@startuml
+actor User as U
+participant "UI" as UI
+participant "API" as API
+participant "DB" as DB
+
+U -> UI : clique "Nouveau ticket"
+UI -> API : POST /tickets
+API -> DB : INSERT ticket
+DB --> API : ticket cree
+API --> UI : 201 Created
+UI --> U : affiche ticket
+
+alt titre vide
+  API --> UI : 400 Bad Request
+  UI --> U : "Titre obligatoire"
+end
+@enduml</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.15 - Diagramme d'Etat : cours -->
+      <div class="slide" data-day="1" data-note="COURS — Le diagramme d'etat (statechart) modelise le cycle de vie d'un OBJET. Pas du systeme entier, d'un seul objet (ici un ticket). Elements : etats (rectangles arrondis), transitions (fleches + evenement), etat initial (point noir), etat final (cible).">
+        <div class="slide-content">
+          <span class="slide-number">J1.15</span>
+          <h1 class="slide-title">Diag. d'Etat (Statechart)</h1>
+          <div class="two-col">
+            <div>
+              <h3>Elements</h3>
+              <ul>
+                <li><strong>Etat</strong> (rectangle arrondi) : situation stable d'un objet</li>
+                <li><strong>Transition</strong> (fleche) : passage d'un etat a un autre</li>
+                <li><strong>Evenement</strong> : ce qui declenche la transition</li>
+                <li><strong>Garde</strong> : condition pour la transition <code>[si ...]</code></li>
+                <li><strong>Etat initial</strong> : point noir</li>
+                <li><strong>Etat final</strong> : cible</li>
+              </ul>
+              <div class="info-box" style="margin-top: 1rem;">
+                <div class="info-box-title">QUESTION CLE</div>
+                <p>Quels sont les etats possibles de mon <strong>ticket</strong> ?</p>
+              </div>
+            </div>
+            <div>
+              <pre style="font-size: 0.8rem;"><code>@startuml
+[*] --> Open
+Open --> InProgress : assigner
+InProgress --> InReview : soumettre
+InReview --> Done : approuver
+InReview --> InProgress : demander\nchangements
+Done --> [*]
+Open --> Cancelled : annuler
+InProgress --> Cancelled : annuler
+
+state InReview {
+  [*] --> Reviewing
+  Reviewing --> Approved
+  Reviewing --> NeedsWork
+}
+@enduml</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.16 - Diagramme de Classes : cours -->
+      <div class="slide" data-day="1" data-note="COURS — Le diagramme de classes est le plus utilise en conception. Il montre les objets du systeme, leurs attributs, leurs methodes, et les relations entre eux. Montrer les types de relations : association, composition, heritage. Rappeler : on ne le pratique pas aujourd'hui mais il sera utile quand on codera.">
+        <div class="slide-content">
+          <span class="slide-number">J1.16</span>
+          <h1 class="slide-title">Diag. de Classes</h1>
+          <div class="two-col">
+            <div>
+              <h3>Elements</h3>
+              <ul>
+                <li><strong>Classe</strong> : nom + attributs + methodes</li>
+                <li><strong>Association</strong> : lien entre classes (trait)</li>
+                <li><strong>Multiplicite</strong> : 1, 0..*, 1..*</li>
+                <li><strong>Composition</strong> : "fait partie de" (losange plein)</li>
+                <li><strong>Heritage</strong> : "est un" (fleche triangle)</li>
+              </ul>
+              <div class="info-box warning" style="margin-top: 1rem;">
+                <div class="info-box-title">POUR PLUS TARD</div>
+                <p>On le pratiquera quand on passera au code. Aujourd'hui c'est pour la culture.</p>
+              </div>
+            </div>
+            <div>
+              <pre style="font-size: 0.78rem;"><code>@startuml
+class Ticket {
+  - id: int
+  - title: string
+  - status: Status
+  - priority: Priority
+  + assign(user: User): void
+  + changeStatus(s: Status): void
+}
+
+class User {
+  - id: int
+  - name: string
+  - email: string
+}
+
+class Comment {
+  - content: string
+  - createdAt: datetime
+}
+
+Ticket "1" --> "0..*" Comment
+Ticket "0..*" --> "1" User : assignee
+User "1" --> "0..*" Comment : author
+@enduml</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.17 - Diagramme d'Activite : cours -->
+      <div class="slide" data-day="1" data-note="COURS — Le diagramme d'activite modelise un PROCESSUS (workflow). Comme un flowchart mais standardise. Utile pour les processus metier. Elements : actions (rectangles arrondis), decisions (losanges), barres de synchronisation, debut/fin.">
+        <div class="slide-content">
+          <span class="slide-number">J1.17</span>
+          <h1 class="slide-title">Diag. d'Activite</h1>
+          <div class="two-col">
+            <div>
+              <h3>Elements</h3>
+              <ul>
+                <li><strong>Action</strong> (rectangle arrondi) : une etape</li>
+                <li><strong>Decision</strong> (losange) : branchement</li>
+                <li><strong>Fork/Join</strong> (barre) : parallelisme</li>
+                <li><strong>Swimlanes</strong> : qui fait quoi</li>
+              </ul>
+              <div class="info-box" style="margin-top: 1rem;">
+                <div class="info-box-title">QUAND L'UTILISER</div>
+                <p>Pour modeliser un <strong>workflow metier</strong> avec plusieurs acteurs ou etapes conditionnelles.</p>
+              </div>
+            </div>
+            <div>
+              <pre style="font-size: 0.78rem;"><code>@startuml
+start
+:Dev cree une PR;
+:Reviewer recoit notification;
+
+if (PR ok ?) then (oui)
+  :Approuver;
+  :Merger dans main;
+else (non)
+  :Demander changements;
+  :Dev corrige;
+  :Re-soumettre;
+  -> Reviewer recoit notification;
+endif
+
+:Fermer l'issue;
+stop
+@enduml</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.18 - Outils UML -->
+      <div class="slide" data-day="1" data-note="COURS — Presenter les outils : PlantUML (texte -> image, versionnable), Mermaid (integre dans GitHub/GitLab), draw.io (drag and drop, export PNG). Insister : PlantUML et Mermaid vivent dans le repo, c'est l'ideal pour un projet Git.">
+        <div class="slide-content">
+          <span class="slide-number">J1.18</span>
+          <h1 class="slide-title">Outils UML</h1>
+          <div class="three-col" style="margin-top: 2rem;">
+            <div class="kanban-card" style="border-top: 3px solid var(--accent-emerald);">
+              <h4 style="color: var(--accent-emerald);">PlantUML</h4>
+              <p>Texte -> image</p>
+              <ul style="margin-top: 0.5rem;">
+                <li>Fichiers <code>.puml</code></li>
+                <li>Versionnable dans Git</li>
+                <li>Rendu en ligne ou en CI</li>
+              </ul>
+              <pre style="font-size: 0.7rem; margin-top: 0.5rem;"><code>plantuml.com/plantuml</code></pre>
+            </div>
+            <div class="kanban-card" style="border-top: 3px solid var(--accent-violet);">
+              <h4 style="color: var(--accent-violet);">Mermaid</h4>
+              <p>Integre dans GitHub</p>
+              <ul style="margin-top: 0.5rem;">
+                <li>Directement dans les <code>.md</code></li>
+                <li>Rendu natif GitHub/GitLab</li>
+                <li>Syntaxe simple</li>
+              </ul>
+              <pre style="font-size: 0.7rem; margin-top: 0.5rem;"><code>mermaid.js.org</code></pre>
+            </div>
+            <div class="kanban-card" style="border-top: 3px solid var(--accent-blue);">
+              <h4 style="color: var(--accent-blue);">draw.io</h4>
+              <p>Drag and drop</p>
+              <ul style="margin-top: 0.5rem;">
+                <li>Visuel, intuitif</li>
+                <li>Export PNG/SVG</li>
+                <li>Moins versionnable</li>
+              </ul>
+              <pre style="font-size: 0.7rem; margin-top: 0.5rem;"><code>app.diagrams.net</code></pre>
+            </div>
+          </div>
+          <div class="info-box success" style="margin-top: 1.5rem;">
+            <div class="info-box-title">RECOMMANDATION</div>
+            <p>PlantUML ou Mermaid = le diagramme vit <strong>dans le repo</strong>, a cote du code.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.19 - UML applique : consigne DO -->
+      <div class="slide" data-day="1" data-note="DO — Maintenant ils pratiquent. 3 diagrammes a produire sur NerdTickets. Chaque diagramme repond a une question vue en cours. Les fichiers vont dans /uml/.">
+        <div class="slide-content">
+          <span class="slide-number">J1.19</span>
+          <h1 class="slide-title">A vous : UML sur NerdTickets</h1>
+          <p><span class="badge badge-do">DO</span></p>
+          <div class="three-col" style="margin-top: 2rem;">
+            <div class="kanban-card">
+              <h4 style="color: var(--accent-blue);">1. Use Case UML</h4>
+              <p>Acteurs + use cases de NerdTickets</p>
+              <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">-> uml/use-case-diagram.puml</p>
+            </div>
+            <div class="kanban-card">
+              <h4 style="color: var(--accent-violet);">2. Sequence</h4>
+              <p>1 use case critique, pas a pas</p>
+              <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">-> uml/sequence-uc01.puml</p>
+            </div>
+            <div class="kanban-card">
+              <h4 style="color: var(--accent-amber);">3. Etat du ticket</h4>
+              <p>Cycle de vie : open -> done</p>
+              <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">-> uml/ticket-state.puml</p>
+            </div>
+          </div>
+          <div class="info-box success" style="margin-top: 2rem;">
+            <div class="info-box-title">LIVRABLE</div>
+            <p>PR #3 "UML v1"</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.20 - UML Use Case applique -->
+      <div class="slide" data-day="1" data-note="EXEMPLE — Montrer le diagramme use case NerdTickets complet. Les acteurs a gauche, les use cases dans le rectangle. Rappeler include/extend. Puis laisser faire." data-exercise="../exercises/03-uml.md">
+        <div class="slide-content">
+          <span class="slide-number">J1.20</span>
+          <h1 class="slide-title">Exemple : Use Case NerdTickets</h1>
+          <div class="two-col">
+            <div>
+              <pre style="font-size: 0.82rem;"><code>@startuml
+left to right direction
+actor Utilisateur as U
+actor Admin as A
+
+rectangle NerdTickets {
+  usecase "Creer ticket" as UC1
+  usecase "Assigner" as UC2
+  usecase "Changer statut" as UC3
+  usecase "Commenter" as UC4
+  usecase "Exporter recap" as UC5
+  usecase "Filtrer tickets" as UC6
+}
+
+U --> UC1
+U --> UC2
+U --> UC3
+U --> UC4
+U --> UC6
+A --> UC5
+A --|> U
+@enduml</code></pre>
+            </div>
+            <div>
+              <h3>Principes</h3>
+              <ul>
+                <li><strong>Acteurs</strong> = qui interagit</li>
+                <li><strong>Use cases</strong> = quoi (pas comment)</li>
+                <li><strong>Liens</strong> = qui fait quoi</li>
+                <li><strong>Admin --|> User</strong> = Admin herite de User</li>
+              </ul>
+              <div class="info-box warning" style="margin-top: 1.5rem;">
+                <div class="info-box-title">PIEGE</div>
+                <p>Ne pas mettre de details techniques dans le diagramme UC.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.21 - UML Sequence applique -->
+      <div class="slide" data-day="1" data-note="EXEMPLE — Montrer le diagramme de sequence pour 'Creer un ticket' avec le fragment alt pour l'erreur. Insister : c'est le scenario nominal du use case, traduit en interactions." data-exercise="../exercises/03-uml.md">
+        <div class="slide-content">
+          <span class="slide-number">J1.21</span>
+          <h1 class="slide-title">Exemple : Sequence "Creer ticket"</h1>
+          <div class="two-col">
+            <div>
+              <pre style="font-size: 0.82rem;"><code>@startuml
+actor Utilisateur as U
+participant "UI" as UI
+participant "API" as API
+participant "DB" as DB
+
+U -> UI : clique "Nouveau ticket"
+UI -> API : POST /tickets
+API -> DB : INSERT ticket
+DB --> API : ticket cree
+API --> UI : 201 Created
+UI --> U : affiche ticket
+
+alt titre vide
+  API --> UI : 400 Bad Request
+  UI --> U : "Titre obligatoire"
+end
+@enduml</code></pre>
+            </div>
+            <div>
+              <h3>Quand l'utiliser</h3>
+              <ul>
+                <li>Pour un use case <strong>critique</strong></li>
+                <li>Quand l'interaction entre composants n'est pas evidente</li>
+                <li>Pour communiquer avec l'equipe</li>
+              </ul>
+              <div class="info-box" style="margin-top: 1.5rem;">
+                <div class="info-box-title">ASTUCE</div>
+                <p>Commencez par le happy path, ajoutez les erreurs ensuite avec <code>alt</code>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.22 - UML Etat applique -->
+      <div class="slide" data-day="1" data-note="EXEMPLE — Montrer le cycle de vie d'un ticket NerdTickets. Chaque fleche = une action. Rappeler les elements du cours : etat, transition, evenement." data-exercise="../exercises/03-uml.md">
+        <div class="slide-content">
+          <span class="slide-number">J1.22</span>
+          <h1 class="slide-title">Exemple : Etat du ticket</h1>
+          <div class="two-col">
+            <div>
+              <pre style="font-size: 0.82rem;"><code>@startuml
+[*] --> Open
+Open --> InProgress : assigner
+InProgress --> InReview : soumettre
+InReview --> Done : approuver
+InReview --> InProgress : changements
+Done --> [*]
+Open --> Cancelled : annuler
+InProgress --> Cancelled : annuler
+@enduml</code></pre>
+            </div>
+            <div>
+              <h3>Cycle de vie</h3>
+              <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                <span class="badge" style="background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.4);">Open</span>
+                <span class="flow-arrow" style="font-size: 1.2rem; padding: 0;">-></span>
+                <span class="badge" style="background: rgba(245,158,11,0.2); color: var(--accent-amber); border: 1px solid rgba(245,158,11,0.4);">InProgress</span>
+                <span class="flow-arrow" style="font-size: 1.2rem; padding: 0;">-></span>
+                <span class="badge" style="background: rgba(139,92,246,0.2); color: var(--accent-violet); border: 1px solid rgba(139,92,246,0.4);">InReview</span>
+                <span class="flow-arrow" style="font-size: 1.2rem; padding: 0;">-></span>
+                <span class="badge" style="background: rgba(16,185,129,0.2); color: var(--accent-emerald); border: 1px solid rgba(16,185,129,0.4);">Done</span>
+              </div>
+              <div class="info-box" style="margin-top: 1.5rem;">
+                <div class="info-box-title">CLE</div>
+                <p>Chaque fleche = une <strong>action</strong> (evenement) qui change l'etat.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== GIT : COURS + COLLABORATION ========== -->
+
+      <!-- Section title: Git -->
+      <div class="slide" data-day="1" data-note="TRANSITION — On passe de la modelisation a la collaboration. Git = l'outil, mais surtout les pratiques. Laisser 5 sec.">
+        <div class="slide-content hero-slide">
+          <span class="slide-number" style="opacity: 0.3;">Partie 3</span>
+          <h1 class="slide-title title-hero" style="font-size: 3.5rem;">Git & Collaboration</h1>
+          <p class="slide-subtitle" style="text-align: center; margin-top: -0.5rem;">Travailler en equipe sans se marcher dessus</p>
+          <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
+            <span class="badge" style="background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.4); font-size: 1rem; padding: 0.4rem 1rem;">Branches</span>
+            <span class="badge" style="background: rgba(139,92,246,0.2); color: var(--accent-violet); border: 1px solid rgba(139,92,246,0.4); font-size: 1rem; padding: 0.4rem 1rem;">Pull Requests</span>
+            <span class="badge" style="background: rgba(16,185,129,0.2); color: var(--accent-emerald); border: 1px solid rgba(16,185,129,0.4); font-size: 1rem; padding: 0.4rem 1rem;">Review</span>
+            <span class="badge" style="background: rgba(245,158,11,0.2); color: var(--accent-amber); border: 1px solid rgba(245,158,11,0.4); font-size: 1rem; padding: 0.4rem 1rem;">Workflow</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.23 - Pourquoi les branches ? COURS -->
+      <div class="slide" data-day="1" data-note="COURS — Poser la question : pourquoi ne pas tous travailler sur main ? Reponse : isolation, experimentation, review. Montrer le schema trunk vs branches. Le but : comprendre POURQUOI avant le COMMENT.">
+        <div class="slide-content">
+          <span class="slide-number">J1.23</span>
+          <h1 class="slide-title">Pourquoi les branches ?</h1>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Sans branches</h3>
+              <pre style="font-size: 0.9rem;"><code>main: A---B---C---D---E
+           ^       ^
+           |       |
+         Alice   Bob (conflit!)</code></pre>
+              <ul class="crosslist" style="margin-top: 1rem;">
+                <li>Tout le monde se marche dessus</li>
+                <li>Pas de review possible</li>
+                <li>Code casse en permanence</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Avec branches</h3>
+              <pre style="font-size: 0.9rem;"><code>main:    A---B-------M
+              \     /
+feature:  C---D---E
+              (review, puis merge)</code></pre>
+              <ul class="checklist" style="margin-top: 1rem;">
+                <li>Chacun travaille en isolation</li>
+                <li>Review avant merge</li>
+                <li><code>main</code> reste stable</li>
+              </ul>
+            </div>
+          </div>
+          <div class="info-box" style="margin-top: 1.5rem;">
+            <div class="info-box-title">PRINCIPE</div>
+            <p>Une branche = un <strong>sujet isole</strong>. On merge quand c'est pret et valide.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.24 - Strategies de branching COURS -->
+      <div class="slide" data-day="1" data-note="COURS — Presenter les 3 strategies principales. Expliquer qu'on utilise GitHub Flow pour NerdTickets car c'est le plus simple et adapte a un petit projet. GitFlow = overkill ici. Trunk-based = pour les equipes avancees avec CI solide.">
+        <div class="slide-content">
+          <span class="slide-number">J1.24</span>
+          <h1 class="slide-title">Strategies de branching</h1>
+          <div class="three-col" style="margin-top: 2rem;">
+            <div class="kanban-card" style="border-left: 3px solid var(--accent-emerald);">
+              <h4 style="color: var(--accent-emerald);">GitHub Flow</h4>
+              <p><code>main</code> + feature branches</p>
+              <ul style="font-size: 0.85rem; margin-top: 0.5rem;">
+                <li>Simple, 1 branche longue</li>
+                <li>PR + review pour merger</li>
+                <li>Deploy depuis <code>main</code></li>
+              </ul>
+              <p style="font-size: 0.85rem; color: var(--accent-emerald); margin-top: 0.5rem;">Ideal pour nous</p>
+            </div>
+            <div class="kanban-card" style="border-left: 3px solid var(--accent-amber);">
+              <h4 style="color: var(--accent-amber);">GitFlow</h4>
+              <p><code>main</code> + <code>develop</code> + features + releases</p>
+              <ul style="font-size: 0.85rem; margin-top: 0.5rem;">
+                <li>Complexe, multi-branches</li>
+                <li>Separe dev / staging / prod</li>
+                <li>Releases planifiees</li>
+              </ul>
+              <p style="font-size: 0.85rem; color: var(--accent-amber); margin-top: 0.5rem;">Gros projets, releases rares</p>
+            </div>
+            <div class="kanban-card" style="border-left: 3px solid var(--accent-blue);">
+              <h4 style="color: var(--accent-blue);">Trunk-based</h4>
+              <p>Branches tres courtes (< 1 jour)</p>
+              <ul style="font-size: 0.85rem; margin-top: 0.5rem;">
+                <li>Merge continu vers main</li>
+                <li>Feature flags si besoin</li>
+                <li>CI/CD solide obligatoire</li>
+              </ul>
+              <p style="font-size: 0.85rem; color: var(--accent-blue); margin-top: 0.5rem;">Equipes avancees, deploy continu</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.25 - Anatomie d'une bonne PR COURS -->
+      <div class="slide" data-day="1" data-note="COURS — La PR est le coeur du workflow. Expliquer chaque element. Montrer un bon exemple vs un mauvais. Insister : la PR est un outil de COMMUNICATION, pas juste un bouton merge.">
+        <div class="slide-content">
+          <span class="slide-number">J1.25</span>
+          <h1 class="slide-title">Anatomie d'une bonne PR</h1>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Les ingredients</h3>
+              <ul class="checklist">
+                <li><strong>Titre clair</strong> : ce que ca fait</li>
+                <li><strong>Issue liee</strong> : <code>Fixes #12</code></li>
+                <li><strong>Description</strong> : pourquoi + comment</li>
+                <li><strong>Petit perimetre</strong> : 1 sujet = 1 PR</li>
+                <li><strong>Commits propres</strong> : lisibles et atomiques</li>
+              </ul>
+              <div class="info-box" style="margin-top: 1rem;">
+                <div class="info-box-title">TAILLE IDEALE</div>
+                <p>< 200 lignes changees. Au-dela, la review perd en qualite.</p>
+              </div>
+            </div>
+            <div>
+              <h3>Exemple de description</h3>
+              <pre style="font-size: 0.8rem;"><code>## Description
+Ajout du use case UC-03 "Assigner un ticket"
+
+## Issue liee
+Fixes #7
+
+## Changements
+- Nouveau fichier docs/use-cases/UC-03.md
+- Scenario nominal + 2 extensions
+
+## Comment relire
+1. Verifier coherence avec la vision
+2. Verifier le format (template UC)
+3. Extensions realistes ?</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.26 - Culture de review COURS -->
+      <div class="slide" data-day="1" data-note="COURS — La review est souvent mal vecue. Poser le cadre : c'est une conversation, pas un jugement. Montrer les bons vs mauvais commentaires. Insister sur le ton et la bienveillance.">
+        <div class="slide-content">
+          <span class="slide-number">J1.26</span>
+          <h1 class="slide-title">Culture de review</h1>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Quoi verifier ?</h3>
+              <ol>
+                <li><strong>Clarte</strong> : je comprends le but ?</li>
+                <li><strong>Coherence</strong> : ca colle avec l'existant ?</li>
+                <li><strong>Completude</strong> : rien ne manque ?</li>
+                <li><strong>Format</strong> : conventions respectees ?</li>
+                <li><strong>Perimetre</strong> : pas de bruit / hors-sujet ?</li>
+              </ol>
+              <div class="info-box warning" style="margin-top: 1rem;">
+                <div class="info-box-title">REGLE D'OR</div>
+                <p>Critiquer le <strong>code</strong>, jamais la <strong>personne</strong>.</p>
+              </div>
+            </div>
+            <div>
+              <h3>Bon vs mauvais commentaire</h3>
+              <div class="info-box danger" style="margin-bottom: 1rem;">
+                <div class="info-box-title">MAUVAIS</div>
+                <p>"C'est nul, ca marchera jamais"</p>
+                <p>"Tu as pas compris le sujet"</p>
+              </div>
+              <div class="info-box success">
+                <div class="info-box-title">BON</div>
+                <p>"Ce scenario ne couvre pas le cas ou le ticket est deja assigne. Tu veux l'ajouter en extension ?"</p>
+                <p>"Le nommage du fichier devrait suivre notre convention UC-XX.md"</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.27 - Merge : les options COURS -->
+      <div class="slide" data-day="1" data-note="COURS — Expliquer les 3 strategies de merge. Montrer les schemas. Pour NerdTickets on recommande Squash and Merge pour garder un historique propre. Rebase = avance, attention.">
+        <div class="slide-content">
+          <span class="slide-number">J1.27</span>
+          <h1 class="slide-title">Merge : les options</h1>
+          <div class="three-col" style="margin-top: 2rem;">
+            <div class="kanban-card">
+              <h4>Merge commit</h4>
+              <pre style="font-size: 0.8rem;"><code>*   Merge PR #3
+|\
+| * feat: add UC-03
+| * docs: update vision
+|/
+* (main)</code></pre>
+              <p style="font-size: 0.85rem; margin-top: 0.5rem;">Garde tout l'historique. Cree un commit de merge.</p>
+            </div>
+            <div class="kanban-card" style="border-left: 3px solid var(--accent-emerald);">
+              <h4 style="color: var(--accent-emerald);">Squash & merge</h4>
+              <pre style="font-size: 0.8rem;"><code>* feat: add UC-03 (#3)
+* (main)</code></pre>
+              <p style="font-size: 0.85rem; margin-top: 0.5rem;">1 PR = 1 commit sur main. Historique propre.</p>
+              <p style="font-size: 0.8rem; color: var(--accent-emerald);">Recommande pour nous</p>
+            </div>
+            <div class="kanban-card">
+              <h4>Rebase & merge</h4>
+              <pre style="font-size: 0.8rem;"><code>* docs: update vision
+* feat: add UC-03
+* (main)</code></pre>
+              <p style="font-size: 0.85rem; margin-top: 0.5rem;">Lineaire, mais reecrit l'historique. Avance.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.28 - Regles Git pour NerdTickets SHOW -->
+      <div class="slide" data-day="1" data-note="SHOW — Poser les regles concretes pour NerdTickets. Montrer les 4 regles imposees. Expliquer Conventional Commits en 2 min. Montrer le nommage de branche feature/<id>-<slug>.">
+        <div class="slide-content">
+          <span class="slide-number">J1.28</span>
+          <h1 class="slide-title">Nos regles Git</h1>
+          <p><span class="badge badge-show">SHOW</span></p>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Regles imposees</h3>
+              <ol>
+                <li><code>main</code> protegee (pas de push direct)</li>
+                <li>Branches : <code>feature/&lt;id&gt;-&lt;slug&gt;</code></li>
+                <li>PR obligatoire + 1 review</li>
+                <li>Commits lisibles</li>
+              </ol>
+            </div>
+            <div>
+              <h3>Conventional Commits</h3>
+              <pre style="font-size: 0.95rem;"><code>feat: ...     nouvelle feature
+fix: ...      correction
+docs: ...     documentation
+refactor: ... restructuration</code></pre>
+              <div class="info-box" style="margin-top: 1rem;">
+                <div class="info-box-title">REGLE</div>
+                <p>1 commit = 1 intention</p>
+                <p style="font-size: 1.1rem;"><code>docs: add review checklist</code></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.29 - Simulation 3 issues DO -->
+      <div class="slide" data-day="1" data-note="DO — Distribuer les 3 issues. Chaque equipe fait : creation issue, branche, commits, PR, review croisee, merge. Circuler pour aider avec les conflits eventuels. Verifier que les PRs sont propres." data-exercise="../exercises/04-collab-git.md">
+        <div class="slide-content">
+          <span class="slide-number">J1.29</span>
+          <h1 class="slide-title">Simulation : 3 issues</h1>
+          <p><span class="badge badge-do">DO</span></p>
+          <div class="three-col" style="margin-top: 2rem;">
+            <div class="kanban-card">
+              <h4>Issue 1</h4>
+              <p>"UC-03 : assigner un ticket"</p>
+              <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-dim);">-> docs/use-cases/UC-03.md</p>
+            </div>
+            <div class="kanban-card">
+              <h4>Issue 2</h4>
+              <p>"UML : sequence UC-01"</p>
+              <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-dim);">-> uml/sequence-uc01.puml</p>
+            </div>
+            <div class="kanban-card">
+              <h4>Issue 3</h4>
+              <p>"Docs : conventions commits"</p>
+              <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-dim);">-> docs/collab-git.md</p>
+            </div>
+          </div>
+          <div class="info-box success" style="margin-top: 2rem;">
+            <div class="info-box-title">LIVRABLE</div>
+            <p>3 PR mergees + <code>docs/collab-git.md</code></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.30 - Le workflow recap -->
+      <div class="slide" data-day="1" data-note="RECAP — Montrer le workflow complet : Issue -> Branche -> Commits -> PR -> Review -> Merge. C'est le cycle qu'ils vont repeter. Insister : c'est la meme chose dans la vraie vie.">
+        <div class="slide-content">
+          <span class="slide-number">J1.30</span>
+          <h1 class="slide-title">Le workflow</h1>
+          <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 2rem;">
+            <div class="kanban-card" style="text-align: center; min-width: 120px;">
+              <h4>Issue</h4>
+              <p>Decrire</p>
+            </div>
+            <div class="flow-arrow">-></div>
+            <div class="kanban-card" style="text-align: center; min-width: 120px;">
+              <h4>Branche</h4>
+              <p>feature/...</p>
+            </div>
+            <div class="flow-arrow">-></div>
+            <div class="kanban-card" style="text-align: center; min-width: 120px;">
+              <h4>Commits</h4>
+              <p>feat: ...</p>
+            </div>
+            <div class="flow-arrow">-></div>
+            <div class="kanban-card" style="text-align: center; min-width: 120px;">
+              <h4>PR</h4>
+              <p>Fixes #12</p>
+            </div>
+            <div class="flow-arrow">-></div>
+            <div class="kanban-card" style="text-align: center; min-width: 120px;">
+              <h4>Review</h4>
+              <p>Approuver</p>
+            </div>
+            <div class="flow-arrow">-></div>
+            <div class="kanban-card" style="text-align: center; min-width: 120px;">
+              <h4>Merge</h4>
+              <p>main</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.31 - Do / Don't -->
+      <div class="slide" data-day="1" data-note="DO/DONT — Slide de reference. A marteler par l'exercice, pas par un speech. La laisser affichee pendant la retro si besoin.">
+        <div class="slide-content">
+          <span class="slide-number">J1.31</span>
+          <h1 class="slide-title">Do / Don't</h1>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <div class="info-box success">
+                <div class="info-box-title">DO</div>
+                <ul class="checklist">
+                  <li>Petites PR, frequentes</li>
+                  <li>Review systematique (meme sur docs/uml)</li>
+                  <li>Ecrire le besoin avant le diagramme</li>
+                  <li>Resoudre conflit en equipe</li>
+                  <li><code>main</code> = stable, toujours</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div class="info-box danger">
+                <div class="info-box-title">DON'T</div>
+                <ul class="crosslist">
+                  <li>Push direct sur main</li>
+                  <li>Branches qui vivent 3 jours</li>
+                  <li>PR enormes "tout le projet"</li>
+                  <li>Commits "update" / "fix" sans contexte</li>
+                  <li>Diagrammes non relies a un use case</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.32 - Mini retro -->
+      <div class="slide" data-day="1" data-note="RETRO — Par equipe puis partage. 3 questions simples. Noter les reponses pour ajuster les regles de J2.">
+        <div class="slide-content">
+          <span class="slide-number">J1.32</span>
+          <h1 class="slide-title">Mini retro</h1>
+          <div class="three-col" style="margin-top: 3rem;">
+            <div class="kanban-card" style="border-left: 3px solid var(--accent-emerald);">
+              <h4 style="color: var(--accent-emerald);">1 truc qui a fluidifie</h4>
+              <p>Qu'est-ce qui a bien marche dans votre collaboration ?</p>
+            </div>
+            <div class="kanban-card" style="border-left: 3px solid var(--accent-amber);">
+              <h4 style="color: var(--accent-amber);">1 friction</h4>
+              <p>Qu'est-ce qui a freine ou frustre ?</p>
+            </div>
+            <div class="kanban-card" style="border-left: 3px solid var(--accent-blue);">
+              <h4 style="color: var(--accent-blue);">1 regle a ajouter demain</h4>
+              <p>Quelle regle manque pour mieux travailler ensemble ?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== JOUR 2 ==================== -->
+      <!-- Industrialiser : review, conflits, CI legere, release -->
+
+      <!-- J2.01 - Titre -->
+      <div class="slide" data-day="2" data-note="INTRO J2 — Rappeler le fil rouge NerdTickets. J2 = industrialiser : review propre, conflits, CI legere, release. On part de ce qu'ils ont produit hier.">
+        <div class="slide-content hero-slide">
+          <span class="slide-number">J2.01</span>
+          <h1 class="slide-title title-hero">Jour 2</h1>
+          <p class="slide-subtitle" style="text-align: center; margin-top: -1rem;">Industrialiser : reviews, conflits, CI & release</p>
+        </div>
+      </div>
+
+      <!-- J2.02 - Plan du jour -->
+      <div class="slide" data-day="2" data-note="PLAN — 6 blocs. Insister : aujourd'hui on apprend les reflexes d'equipe qui font la difference entre un projet amateur et un projet pro.">
+        <div class="slide-content" style="text-align: center;">
+          <span class="slide-number">J2.02</span>
+          <h1 class="slide-title title-plan">Jour 2</h1>
+          <ol style="display: inline-block; text-align: left;">
+            <li>PR "sale" a reparer</li>
+            <li>Conflits Git</li>
+            <li>Workflow propre : Issues -> PR -> Done</li>
+            <li>CI legere & qualite</li>
+            <li>Release / versioning / changelog</li>
+            <li>Demo finale & retro</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- J2.03 - PR sale warm-up -->
+      <div class="slide" data-day="2" data-note="WARM-UP — DO immediat. Fournir (ou demander a une equipe de jouer) une PR volontairement problematique : 1 commit 'wip', fichier modifie partout, message vague, pas d'issue liee. La classe analyse et ecrit une checklist." data-exercise="../exercises/05-pr-sale.md">
+        <div class="slide-content">
+          <span class="slide-number">J2.03</span>
+          <h1 class="slide-title">Warm-up : PR "sale"</h1>
+          <p><span class="badge badge-do">DO</span></p>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>La PR problematique</h3>
+              <ul class="crosslist">
+                <li>1 commit "wip"</li>
+                <li>Fichier modifie partout</li>
+                <li>Message vague "update stuff"</li>
+                <li>Pas d'issue liee</li>
+                <li>.DS_Store qui traine</li>
+              </ul>
+            </div>
+            <div>
+              <h3>A faire (classe entiere)</h3>
+              <ol>
+                <li>Identifier les problemes</li>
+                <li>Ecrire une checklist de review</li>
+                <li>Demander des changements</li>
+                <li>Corriger (squash/rewrite)</li>
+              </ol>
+              <div class="info-box success" style="margin-top: 1rem;">
+                <div class="info-box-title">LIVRABLE</div>
+                <p><code>docs/review-checklist.md</code></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J2.04 - Checklist review -->
+      <div class="slide" data-day="2" data-note="REFERENCE — Afficher la checklist minimum viable. C'est leur guide de review pour le reste de la journee.">
+        <div class="slide-content">
+          <span class="slide-number">J2.04</span>
+          <h1 class="slide-title">Checklist de review</h1>
+          <div class="two-col">
+            <div>
+              <ul class="checklist">
+                <li>Le but est clair (issue liee)</li>
+                <li>Petit perimetre / pas de bruit</li>
+                <li>Nommage ok, docs a jour</li>
+                <li>Diagrammes coherents avec use case</li>
+                <li>Aucun "WIP", aucun commit inutile</li>
+              </ul>
+            </div>
+            <div>
+              <div class="info-box warning">
+                <div class="info-box-title">RAPPEL</div>
+                <p>Une review n'est pas un jugement. C'est une <strong>conversation</strong> pour ameliorer le code ensemble.</p>
+              </div>
+              <div class="info-box" style="margin-top: 1rem;">
+                <div class="info-box-title">COMMENTAIRE TYPE</div>
+                <p style="font-size: 1.1rem;">"Ce commit melange 2 sujets. Peux-tu separer en 2 commits ?"</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J2.05 - Conflits Git SHOW -->
+      <div class="slide" data-day="2" data-note="SHOW — Creer un conflit simple sur un .md en live. Montrer les marqueurs <<<<< ===== >>>>>. Montrer la resolution : lire les 2 versions, choisir, nettoyer, committer. Insister : resoudre EN EQUIPE, pas en solo.">
+        <div class="slide-content">
+          <span class="slide-number">J2.05</span>
+          <h1 class="slide-title">Conflits Git</h1>
+          <p><span class="badge badge-show">SHOW</span></p>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Les marqueurs</h3>
+              <pre style="font-size: 0.9rem;"><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+Le scenario modifie par Alice
+=======
+Le scenario modifie par Bob
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/conflict-b</code></pre>
+            </div>
+            <div>
+              <h3>Resolution</h3>
+              <ol>
+                <li>Lire les 2 versions</li>
+                <li><strong>Discuter</strong> (pas en solo !)</li>
+                <li>Fusionner intelligemment</li>
+                <li>Tester la coherence</li>
+                <li>Committer proprement</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J2.06 - Conflits Git DO -->
+      <div class="slide" data-day="2" data-note="DO — Par binomes : deux branches modifient la meme section d'un use case. Merge/rebase + resolution propre. Commit de resolution clair. Puis ajouter une section dans collab-git.md." data-exercise="../exercises/06-conflits-git.md">
+        <div class="slide-content">
+          <span class="slide-number">J2.06</span>
+          <h1 class="slide-title">A vous : Conflits</h1>
+          <p><span class="badge badge-do">DO</span></p>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Par binomes</h3>
+              <ol>
+                <li>Choisir un fichier commun</li>
+                <li>2 branches, meme section</li>
+                <li>Merge en premier -> conflit !</li>
+                <li>Rebase + resolution propre</li>
+                <li>Commit de resolution clair</li>
+              </ol>
+            </div>
+            <div>
+              <div class="info-box success">
+                <div class="info-box-title">LIVRABLE</div>
+                <p>1 conflit resolu par equipe</p>
+                <p style="margin-top: 0.5rem;">+ section dans <code>docs/collab-git.md</code> : "comment on gere les conflits ici"</p>
+              </div>
+              <div class="info-box warning" style="margin-top: 1rem;">
+                <div class="info-box-title">STRATEGIE</div>
+                <p><code>git rebase main</code> puis <code>--force-with-lease</code></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J2.07 - Workflow propre -->
+      <div class="slide" data-day="2" data-note="DO — Objectif : relier gestion de projet et Git. Chaque equipe prend 2 nouvelles issues avec criteres d'acceptation. PR qui reference l'issue, decrit le changement, propose comment relire." data-exercise="../exercises/07-workflow-propre.md">
+        <div class="slide-content">
+          <span class="slide-number">J2.07</span>
+          <h1 class="slide-title">Workflow propre</h1>
+          <p><span class="badge badge-do">DO</span></p>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Par equipe : 2 issues</h3>
+              <ul>
+                <li>Criteres d'acceptation (DoD)</li>
+                <li>Branche + commits propres</li>
+                <li>PR qui reference <code>Fixes #XX</code></li>
+                <li>Description + comment relire</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Template PR</h3>
+              <pre style="font-size: 0.85rem;"><code>## Description
+Ajout UC-04 "Commenter un ticket"
+
+## Issue liee
+Fixes #12
+
+## Comment relire
+1. Verifier coherence vision
+2. Verifier format template
+3. Extensions realistes ?</code></pre>
+              <div class="info-box success" style="margin-top: 1rem;">
+                <div class="info-box-title">LIVRABLE</div>
+                <p>2 PR mergees / equipe, historique propre</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J2.08 - CI legere SHOW -->
+      <div class="slide" data-day="2" data-note="SHOW — Montrer qu'on peut automatiser des verifications simples sans partir dans DevOps. Un script bash qui verifie les sections obligatoires des use cases. Ou un PR template + checklist stricte.">
+        <div class="slide-content">
+          <span class="slide-number">J2.08</span>
+          <h1 class="slide-title">CI legere & qualite</h1>
+          <p><span class="badge badge-show">SHOW</span></p>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Script lint-docs.sh</h3>
+              <pre style="font-size: 0.8rem;"><code>#!/usr/bin/env bash
+for file in docs/use-cases/UC-*.md; do
+  for section in "Acteurs" "But" \
+    "Scenario nominal"; do
+    if ! grep -q "## $section" "$file"; then
+      echo "ERREUR: $file manque '$section'"
+    fi
+  done
+done</code></pre>
+            </div>
+            <div>
+              <h3>Options</h3>
+              <div class="three-col" style="grid-template-columns: 1fr;">
+                <div class="kanban-card">
+                  <h4 style="color: var(--accent-emerald);">A. Script bash</h4>
+                  <p>Verifie les use cases</p>
+                </div>
+                <div class="kanban-card">
+                  <h4 style="color: var(--accent-amber);">B. GitHub Action</h4>
+                  <p>Lint automatique sur PR</p>
+                </div>
+                <div class="kanban-card">
+                  <h4 style="color: var(--accent-blue);">C. PR template</h4>
+                  <p>Checklist stricte</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J2.09 - CI legere DO -->
+      <div class="slide" data-day="2" data-note="DO — Chaque equipe choisit une option et l'implemente. Le script bash est le plus facile. La GitHub Action est un bonus. Le PR template est le minimum." data-exercise="../exercises/08-ci-legere.md">
+        <div class="slide-content">
+          <span class="slide-number">J2.09</span>
+          <h1 class="slide-title">A vous : CI legere</h1>
+          <p><span class="badge badge-do">DO</span></p>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Choisir une option</h3>
+              <ol>
+                <li><strong>Script</strong> <code>scripts/lint-docs.sh</code></li>
+                <li><strong>GitHub Action</strong> (si le temps)</li>
+                <li><strong>PR template</strong> solide (minimum)</li>
+              </ol>
+              <div class="info-box" style="margin-top: 1.5rem;">
+                <div class="info-box-title">OBJECTIF</div>
+                <p>Un garde-fou qui empeche de merger n'importe quoi.</p>
+              </div>
+            </div>
+            <div>
+              <div class="info-box success">
+                <div class="info-box-title">LIVRABLE</div>
+                <p>1 check automatique ou un garde-fou process (PR template solide)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J2.10 - Release / versioning -->
+      <div class="slide" data-day="2" data-note="DO — Creer CHANGELOG.md, tagger v0.1.0, ecrire une release note. Option : branch release/0.1.0 puis merge vers main. Montrer SemVer rapidement." data-exercise="../exercises/09-release.md">
+        <div class="slide-content">
+          <span class="slide-number">J2.10</span>
+          <h1 class="slide-title">Release & Versioning</h1>
+          <p><span class="badge badge-do">DO</span></p>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>A faire</h3>
+              <ol>
+                <li>Creer <code>CHANGELOG.md</code></li>
+                <li>Tagger <code>v0.1.0</code></li>
+                <li>Ecrire une <strong>release note</strong></li>
+                <li><em>(option)</em> Branche <code>release/0.1.0</code></li>
+              </ol>
+              <h3 style="margin-top: 1.5rem;">SemVer</h3>
+              <pre style="font-size: 0.9rem;"><code>MAJOR.MINOR.PATCH
+0.1.0 = premiere version
+0.2.0 = nouvelles features
+1.0.0 = stable, pret pour la prod</code></pre>
+            </div>
+            <div>
+              <h3>Commandes</h3>
+              <pre style="font-size: 0.9rem;"><code>git tag -a v0.1.0 \
+  -m "v0.1.0 - MVP documentation"
+git push origin v0.1.0</code></pre>
+              <div class="info-box success" style="margin-top: 1rem;">
+                <div class="info-box-title">LIVRABLE</div>
+                <p>Tag + changelog + release note</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J2.11 - Demo finale -->
+      <div class="slide" data-day="2" data-note="DEMO FINALE — Chaque equipe montre 4 choses : 1 use case + 1 diagramme, 1 PR exemplaire, 1 conflit resolu, 1 regle qu'ils gardent. Puis retro generale.">
+        <div class="slide-content">
+          <span class="slide-number">J2.11</span>
+          <h1 class="slide-title">Demo finale & Retro</h1>
+          <p></p>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Chaque equipe montre</h3>
+              <ol>
+                <li>1 use case + 1 diagramme associe</li>
+                <li>1 PR "exemplaire"</li>
+                <li>1 conflit resolu</li>
+                <li>1 regle qu'ils gardent "pour la vraie vie"</li>
+              </ol>
+            </div>
+            <div>
+              <h3>Retro generale</h3>
+              <div class="kanban-card" style="border-left: 3px solid var(--accent-emerald);">
+                <h4 style="color: var(--accent-emerald);">Ce qui a marche</h4>
+                <p>Quel reflexe gardez-vous ?</p>
+              </div>
+              <div class="kanban-card" style="margin-top: 1rem; border-left: 3px solid var(--accent-amber);">
+                <h4 style="color: var(--accent-amber);">Ce qui reste difficile</h4>
+                <p>Ou avez-vous besoin de pratique ?</p>
+              </div>
+              <div class="kanban-card" style="margin-top: 1rem; border-left: 3px solid var(--accent-blue);">
+                <h4 style="color: var(--accent-blue);">Pour un vrai projet</h4>
+                <p>Que changeriez-vous ?</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J2.12 - Recapitulatif templates -->
+      <div class="slide" data-day="2" data-note="REFERENCE — Slide recapitulative des templates. A garder sous la main.">
+        <div class="slide-content">
+          <span class="slide-number">J2.12</span>
+          <h1 class="slide-title">Templates</h1>
+          <div class="three-col" style="margin-top: 1.5rem;">
+            <div class="kanban-card">
+              <h4>Use Case</h4>
+              <pre style="font-size: 0.7rem; margin: 0.5rem 0; border: none; padding: 0.5rem;"><code>ID / Nom
+Acteurs
+But
+Preconditions
+Declencheur
+Scenario nominal
+Extensions / erreurs
+Postconditions
+Notes metier</code></pre>
+            </div>
+            <div class="kanban-card">
+              <h4>Commits</h4>
+              <pre style="font-size: 0.7rem; margin: 0.5rem 0; border: none; padding: 0.5rem;"><code>feat: ...
+fix: ...
+docs: ...
+refactor: ...
+
+1 commit = 1 intention
+verbe + objet</code></pre>
+            </div>
+            <div class="kanban-card">
+              <h4>Checklist Review</h4>
+              <pre style="font-size: 0.7rem; margin: 0.5rem 0; border: none; padding: 0.5rem;"><code>- Issue liee
+- Petit perimetre
+- Nommage ok
+- Docs a jour
+- Diagrammes coherents
+- Pas de WIP</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J2.13 - Do / Don't recap -->
+      <div class="slide" data-day="2" data-note="REFERENCE FINALE — La slide Do/Don't de fin. A garder en memoire pour tous les futurs projets.">
+        <div class="slide-content">
+          <span class="slide-number">J2.13</span>
+          <h1 class="slide-title">Do / Don't</h1>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <div class="info-box success">
+                <div class="info-box-title">DO</div>
+                <ul class="checklist">
+                  <li>Petites PR, frequentes</li>
+                  <li>Review systematique (meme sur docs/uml)</li>
+                  <li>Ecrire le besoin avant le diagramme</li>
+                  <li>Resoudre conflit en equipe (pas en solo)</li>
+                  <li><code>main</code> = stable, toujours</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div class="info-box danger">
+                <div class="info-box-title">DON'T</div>
+                <ul class="crosslist">
+                  <li>Push direct sur main</li>
+                  <li>Branches qui vivent 3 jours</li>
+                  <li>PR enormes "tout le projet"</li>
+                  <li>Commits "update" / "fix" sans contexte</li>
+                  <li>Diagrammes "pour faire joli" non relies a un use case</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== OUVERTURE : PROJETS J3+ ========== -->
+
+      <!-- J2.14 - Transition projets -->
+      <div class="slide" data-day="2" data-note="TRANSITION — Marquer la fin du cadre theorique. Tout ce qu'ils ont appris (use cases, UML, Git, PR, review, CI, release) va servir CONCRETEMENT des demain sur un vrai projet en equipe.">
+        <div class="slide-content hero-slide">
+          <span class="slide-number" style="opacity: 0.3;">Et maintenant...</span>
+          <h1 class="slide-title title-hero" style="font-size: 3rem;">De la theorie a la pratique</h1>
+          <p class="slide-subtitle" style="text-align: center; margin-top: -0.5rem;">Tout ce que vous avez appris va servir des demain</p>
+        </div>
+      </div>
+
+      <!-- J2.15 - Les 2 projets -->
+      <div class="slide" data-day="2" data-note="OUVERTURE — Presenter les 2 projets. Chaque equipe choisira l'un des deux. Flipper = Web + Hardware tangible. Robot = IA + Systemes. Les deux mobilisent IoT, collaboration Git, et tout le process qu'on vient de poser.">
+        <div class="slide-content">
+          <span class="slide-number">J2.15</span>
+          <h1 class="slide-title">Vos projets</h1>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div class="kanban-card" style="border-left: 3px solid var(--accent-blue);">
+              <h4 style="color: var(--accent-blue);">Projet Flipper</h4>
+              <p>Flipper virtuel + controleurs physiques</p>
+              <ul style="font-size: 0.85rem; margin-top: 0.5rem;">
+                <li>Three.js + Cannon.js (3D / physique)</li>
+                <li>WebSocket + MQTT</li>
+                <li>ESP32 / Arduino</li>
+                <li>3 ecrans synchronises</li>
+              </ul>
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap;">
+                <span class="badge" style="background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.4); font-size: 0.75rem;">Web</span>
+                <span class="badge" style="background: rgba(16,185,129,0.2); color: var(--accent-emerald); border: 1px solid rgba(16,185,129,0.4); font-size: 0.75rem;">IoT</span>
+                <span class="badge" style="background: rgba(139,92,246,0.2); color: var(--accent-violet); border: 1px solid rgba(139,92,246,0.4); font-size: 0.75rem;">Hardware</span>
+              </div>
+            </div>
+            <div class="kanban-card" style="border-left: 3px solid var(--accent-emerald);">
+              <h4 style="color: var(--accent-emerald);">Projet Robotique</h4>
+              <p>Robot d'assistance autonome</p>
+              <ul style="font-size: 0.85rem; margin-top: 0.5rem;">
+                <li>ROS 2 + Navigation (SLAM)</li>
+                <li>Dashboard web temps reel</li>
+                <li>LiDAR, Camera, IMU</li>
+                <li>Interface accessible</li>
+              </ul>
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap;">
+                <span class="badge" style="background: rgba(16,185,129,0.2); color: var(--accent-emerald); border: 1px solid rgba(16,185,129,0.4); font-size: 0.75rem;">ROS</span>
+                <span class="badge" style="background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.4); font-size: 0.75rem;">Web</span>
+                <span class="badge" style="background: rgba(245,158,11,0.2); color: var(--accent-amber); border: 1px solid rgba(245,158,11,0.4); font-size: 0.75rem;">IA</span>
+              </div>
+            </div>
+          </div>
+          <div class="info-box" style="margin-top: 1.5rem;">
+            <div class="info-box-title">EQUIPES</div>
+            <p>Choix du projet en equipe. Details et inscription demain.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- J2.16 - Ce que vous avez deja -->
+      <div class="slide" data-day="2" data-note="CLE — Faire le lien explicite entre les 2 jours de GDP et le projet. Chaque competence acquise correspond a un besoin concret du projet. Ils ne partent pas de zero.">
+        <div class="slide-content">
+          <span class="slide-number">J2.16</span>
+          <h1 class="slide-title">Vous avez deja les outils</h1>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Ce que vous savez faire</h3>
+              <ul class="checklist">
+                <li>Definir une vision et des personas</li>
+                <li>Ecrire des use cases structures</li>
+                <li>Modeliser en UML (sequence, etat...)</li>
+                <li>Collaborer en Git (branches, PR, review)</li>
+                <li>Resoudre des conflits</li>
+                <li>Versionner et releaser</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Ce que ca donne sur le projet</h3>
+              <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                <div class="kanban-card" style="padding: 0.6rem 1rem;">
+                  <p style="margin: 0;"><strong>S1</strong> — Use cases + UML du projet</p>
+                </div>
+                <div class="kanban-card" style="padding: 0.6rem 1rem;">
+                  <p style="margin: 0;"><strong>S2-S6</strong> — Sprints avec PR + reviews</p>
+                </div>
+                <div class="kanban-card" style="padding: 0.6rem 1rem;">
+                  <p style="margin: 0;"><strong>S7-S8</strong> — Integration + CI</p>
+                </div>
+                <div class="kanban-card" style="padding: 0.6rem 1rem;">
+                  <p style="margin: 0;"><strong>S9-S10</strong> — Release + demo finale</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J2.17 - Merci -->
+      <div class="slide" data-day="2" data-note="MERCI — Fin de la formation. Questions ? Rappeler : demain on choisit les projets et on demarre.">
+        <div class="slide-content hero-slide">
+          <span class="slide-number">J2.17</span>
+          <h1 class="slide-title title-hero">Merci !</h1>
+          <p class="slide-subtitle" style="text-align: center; margin-top: -1rem;">Demain, on construit pour de vrai.</p>
+          <p class="author">Sion GENDERS</p>
+          <p class="linkedin"><a href="https://www.linkedin.com/in/sion-gdrs/" target="_blank">linkedin.com/in/sion-gdrs</a></p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Speaker notes panel -->
+  <div class="speaker-notes" id="speakerNotes">
+    <div class="speaker-notes-content">
+      <div class="speaker-notes-title">NOTES</div>
+      <div class="speaker-notes-text" id="notesText">Aucune note pour cette slide.</div>
+    </div>
+  </div>
+
+  <!-- TP panel -->
+  <div class="tp-panel" id="tpPanel">
+    <div class="tp-panel-content">
+      <div class="tp-panel-header">
+        <span>EXERCICE</span>
+        <div class="tp-panel-actions">
+          <a href="#" id="tpOpenLink" target="_blank">ouvrir</a>
+        </div>
+      </div>
+      <div class="tp-panel-body" id="tpPanelBody">
+        <p class="tp-panel-empty">Aucun enonce pour cette slide.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Navigation arrows -->
+  <div class="nav-arrows">
+    <button class="nav-arrow" id="prevBtn" title="Slide precedente">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    <button class="nav-arrow" id="nextBtn" title="Slide suivante">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Slide counter -->
+  <div class="slide-counter">
+    <span class="current" id="currentSlide">1</span> / <span id="totalSlides">32</span>
+  </div>
+
+  <!-- Keyboard hint -->
+  <div class="keyboard-hint">
+    <span class="key">&larr;</span><span class="key">&rarr;</span> naviguer
+    <span class="key">N</span> notes
+    <span class="key">F</span> plein ecran
+    <span class="key">T</span> TP
+    <span class="key">A</span> aide
+  </div>
+
+  <script>
+    // State
+    let currentDay = 1;
+    let currentSlideIndex = 0;
+    let notesVisible = false;
+    let tpVisible = false;
+    let assistMode = false;
+    let currentExercisePath = '';
+    const exerciseCache = new Map();
+    let slides = [];
+    let filteredSlides = [];
+
+    // DOM elements
+    const slidesWrapper = document.getElementById('slidesWrapper');
+    const dayBtns = document.querySelectorAll('.day-btn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const notesBtn = document.getElementById('notesBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const menuBtn = document.getElementById('menuBtn');
+    const slideMenu = document.getElementById('slideMenu');
+    const speakerNotes = document.getElementById('speakerNotes');
+    const notesText = document.getElementById('notesText');
+    const progressBar = document.getElementById('progressBar');
+    const currentSlideEl = document.getElementById('currentSlide');
+    const totalSlidesEl = document.getElementById('totalSlides');
+    const tpBtn = document.getElementById('tpBtn');
+    const assistBtn = document.getElementById('assistBtn');
+    const tpPanel = document.getElementById('tpPanel');
+    const tpPanelBody = document.getElementById('tpPanelBody');
+    const tpOpenLink = document.getElementById('tpOpenLink');
+
+    // Initialize
+    function init() {
+      slides = Array.from(document.querySelectorAll('.slide'));
+      filterSlidesByDay(currentDay);
+      updateSlide();
+      buildSlideMenu();
+    }
+
+    // Filter slides by day
+    function filterSlidesByDay(day) {
+      currentDay = day;
+      filteredSlides = slides.filter(s => parseInt(s.dataset.day) === day);
+      currentSlideIndex = 0;
+
+      dayBtns.forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.day) === day);
+      });
+
+      slides.forEach(s => {
+        s.classList.remove('active', 'prev');
+      });
+
+      buildSlideMenu();
+      updateSlide();
+    }
+
+    // Build slide menu
+    function buildSlideMenu() {
+      slideMenu.innerHTML = '';
+      filteredSlides.forEach((slide, index) => {
+        const number = slide.querySelector('.slide-number')?.textContent || '';
+        const title = slide.querySelector('.slide-title')?.textContent?.substring(0, 40) || '';
+
+        const item = document.createElement('div');
+        item.className = 'slide-menu-item' + (index === currentSlideIndex ? ' active' : '');
+        item.innerHTML = `<span class="slide-menu-number">${number}</span>${title}`;
+        item.addEventListener('click', () => {
+          goToSlide(index);
+          slideMenu.classList.remove('visible');
+        });
+        slideMenu.appendChild(item);
+      });
+    }
+
+    // Update current slide
+    function updateSlide() {
+      filteredSlides.forEach((slide, index) => {
+        slide.classList.remove('active', 'prev');
+        if (index === currentSlideIndex) {
+          slide.classList.add('active');
+        } else if (index < currentSlideIndex) {
+          slide.classList.add('prev');
+        }
+      });
+
+      const currentSlide = filteredSlides[currentSlideIndex];
+      const note = currentSlide?.dataset.note || '';
+      notesText.textContent = note || 'Aucune note pour cette slide.';
+
+      const progress = ((currentSlideIndex + 1) / filteredSlides.length) * 100;
+      progressBar.style.width = `${progress}%`;
+
+      currentSlideEl.textContent = currentSlideIndex + 1;
+      totalSlidesEl.textContent = filteredSlides.length;
+
+      prevBtn.disabled = currentSlideIndex === 0;
+      nextBtn.disabled = currentSlideIndex === filteredSlides.length - 1;
+
+      document.querySelectorAll('.slide-menu-item').forEach((item, i) => {
+        item.classList.toggle('active', i === currentSlideIndex);
+      });
+
+      updateTpPanelAvailability();
+    }
+
+    // Navigation
+    function nextSlide() {
+      if (currentSlideIndex < filteredSlides.length - 1) {
+        currentSlideIndex++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlideIndex > 0) {
+        currentSlideIndex--;
+        updateSlide();
+      }
+    }
+
+    function goToSlide(index) {
+      if (index >= 0 && index < filteredSlides.length) {
+        currentSlideIndex = index;
+        updateSlide();
+      }
+    }
+
+    // Toggle notes
+    function toggleNotes() {
+      notesVisible = !notesVisible;
+      speakerNotes.classList.toggle('visible', notesVisible);
+      notesBtn.classList.toggle('active', notesVisible);
+    }
+
+    function setTpVisible(visible) {
+      tpVisible = visible;
+      tpPanel.classList.toggle('visible', tpVisible);
+      tpBtn.classList.toggle('active', tpVisible);
+
+      if (tpVisible && notesVisible) {
+        notesVisible = false;
+        speakerNotes.classList.remove('visible');
+        notesBtn.classList.remove('active');
+      }
+    }
+
+    function toggleTp() {
+      const currentSlide = filteredSlides[currentSlideIndex];
+      if (!currentSlide?.dataset.exercise) {
+        return;
+      }
+      setTpVisible(!tpVisible);
+      if (tpVisible) {
+        loadExerciseForSlide(currentSlide);
+      }
+    }
+
+    function toggleAssist() {
+      const currentSlide = filteredSlides[currentSlideIndex];
+      if (!currentSlide?.dataset.exercise) {
+        return;
+      }
+      assistMode = !assistMode;
+      assistBtn.classList.toggle('active', assistMode);
+      if (tpVisible) {
+        loadExerciseForSlide(currentSlide);
+      }
+    }
+
+    function stripAssistSection(markdown) {
+      const lines = markdown.split('\n');
+      const output = [];
+      let skip = false;
+
+      for (const line of lines) {
+        if (/^##\s*(Aide|Assistance)\b/i.test(line)) {
+          skip = true;
+          continue;
+        }
+
+        if (skip && /^#{1,6}\s+/.test(line)) {
+          skip = false;
+        }
+
+        if (skip) {
+          continue;
+        }
+
+        output.push(line);
+      }
+
+      return output.join('\n');
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderMarkdown(markdown) {
+      const lines = markdown.split('\n');
+      let html = '';
+      let inCode = false;
+      let listType = null;
+
+      const closeList = () => {
+        if (listType) {
+          html += `</${listType}>`;
+          listType = null;
+        }
+      };
+
+      for (const line of lines) {
+        if (line.trim().startsWith('```')) {
+          if (inCode) {
+            html += '</code></pre>';
+            inCode = false;
+          } else {
+            closeList();
+            html += '<pre><code>';
+            inCode = true;
+          }
+          continue;
+        }
+
+        if (inCode) {
+          html += `${escapeHtml(line)}\n`;
+          continue;
+        }
+
+        if (line.trim() === '') {
+          closeList();
+          continue;
+        }
+
+        const headingMatch = line.match(/^(#{1,3})\s+(.*)$/);
+        if (headingMatch) {
+          closeList();
+          const level = headingMatch[1].length;
+          const tag = level <= 2 ? 'h3' : 'h4';
+          html += `<${tag}>${escapeHtml(headingMatch[2])}</${tag}>`;
+          continue;
+        }
+
+        const orderedMatch = line.match(/^\d+\.\s+(.*)$/);
+        if (orderedMatch) {
+          if (listType !== 'ol') {
+            closeList();
+            listType = 'ol';
+            html += '<ol>';
+          }
+          html += `<li>${escapeHtml(orderedMatch[1])}</li>`;
+          continue;
+        }
+
+        const bulletMatch = line.match(/^[-*]\s+(.*)$/);
+        if (bulletMatch) {
+          if (listType !== 'ul') {
+            closeList();
+            listType = 'ul';
+            html += '<ul>';
+          }
+          html += `<li>${escapeHtml(bulletMatch[1])}</li>`;
+          continue;
+        }
+
+        closeList();
+        html += `<p>${escapeHtml(line)}</p>`;
+      }
+
+      closeList();
+
+      if (inCode) {
+        html += '</code></pre>';
+      }
+
+      return html;
+    }
+
+    function renderExercise(markdown) {
+      const content = assistMode ? markdown : stripAssistSection(markdown);
+      tpPanelBody.innerHTML = renderMarkdown(content);
+    }
+
+    function loadExerciseForSlide(slide) {
+      const exercisePath = slide?.dataset.exercise || '';
+      if (!exercisePath) {
+        tpPanelBody.innerHTML = '<p class="tp-panel-empty">Aucun enonce pour cette slide.</p>';
+        tpOpenLink.href = '#';
+        return;
+      }
+
+      currentExercisePath = exercisePath;
+      const exerciseUrl = new URL(exercisePath, window.location.href).toString();
+      tpOpenLink.href = exerciseUrl;
+
+      const cached = exerciseCache.get(exercisePath);
+      if (cached) {
+        renderExercise(cached);
+        return;
+      }
+
+      tpPanelBody.innerHTML = '<p class="tp-panel-empty">Chargement...</p>';
+      fetch(exerciseUrl)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('not found');
+          }
+          return response.text();
+        })
+        .then((text) => {
+          exerciseCache.set(exercisePath, text);
+          renderExercise(text);
+        })
+        .catch(() => {
+          tpPanelBody.innerHTML = '<p class="tp-panel-empty">Enonce introuvable.</p>';
+        });
+    }
+
+    function updateTpPanelAvailability() {
+      const currentSlide = filteredSlides[currentSlideIndex];
+      const exercisePath = currentSlide?.dataset.exercise;
+      const hasExercise = !!exercisePath;
+
+      tpBtn.disabled = !hasExercise;
+      assistBtn.disabled = !hasExercise;
+      assistBtn.classList.toggle('active', assistMode && hasExercise);
+
+      if (!hasExercise) {
+        setTpVisible(false);
+        return;
+      }
+
+      if (tpVisible && exercisePath !== currentExercisePath) {
+        loadExerciseForSlide(currentSlide);
+      }
+    }
+
+    // Toggle fullscreen
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+        fullscreenBtn.classList.add('active');
+      } else {
+        document.exitFullscreen();
+        fullscreenBtn.classList.remove('active');
+      }
+    }
+
+    // Event listeners
+    dayBtns.forEach(btn => {
+      btn.addEventListener('click', () => filterSlidesByDay(parseInt(btn.dataset.day)));
+    });
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    notesBtn.addEventListener('click', toggleNotes);
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+    tpBtn.addEventListener('click', toggleTp);
+    assistBtn.addEventListener('click', toggleAssist);
+
+    menuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      slideMenu.classList.toggle('visible');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!slideMenu.contains(e.target) && e.target !== menuBtn) {
+        slideMenu.classList.remove('visible');
+      }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      switch(e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+        case ' ':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'n':
+        case 'N':
+          toggleNotes();
+          break;
+        case 'f':
+        case 'F':
+          toggleFullscreen();
+          break;
+        case 't':
+        case 'T':
+          toggleTp();
+          break;
+        case 'a':
+        case 'A':
+          toggleAssist();
+          break;
+        case 'Escape':
+          slideMenu.classList.remove('visible');
+          break;
+        case '1':
+          filterSlidesByDay(1);
+          break;
+        case '2':
+          filterSlidesByDay(2);
+          break;
+      }
+    });
+
+    // Touch support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    slidesWrapper.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    slidesWrapper.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) nextSlide();
+        else prevSlide();
+      }
+    }, { passive: true });
+
+    // Fullscreen change handler
+    document.addEventListener('fullscreenchange', () => {
+      fullscreenBtn.classList.toggle('active', !!document.fullscreenElement);
+    });
+
+    // Initialize
+    init();
+  </script>
+</body>
+</html>
