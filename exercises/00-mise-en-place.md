@@ -1,35 +1,30 @@
-# Mise en place du repo NerdTickets
+# Mise en place du monorepo
 
 ## Objectif
-Creer le repo de votre equipe et faire un premier commit.
+Creer le repo de votre equipe et faire un premier commit avec la structure monorepo.
 
 ## Consignes
 
 1. **Un membre** cree le repo sur GitHub (public ou prive)
-2. Les autres **fork** ou **clone** le repo
-3. Verifier la structure initiale :
-
-```
-/docs/vision.md
-/docs/use-cases/
-/uml/
-.github/pull_request_template.md
-```
-
+   - Nom suggere : `flipper` ou `robot-assistance` (selon votre projet)
+2. Les autres **clone** le repo (pas de fork, vous travaillez dans le meme repo)
+3. Mettre en place la structure monorepo (voir ci-dessous)
 4. Chaque membre fait un commit `init: add team member <prenom>`
 
-## Structure du repo
+## Structure du monorepo
 
 ```
-nerd-tickets/
+mon-projet/
   docs/
-    vision.md          (vide pour l'instant)
-    use-cases/         (dossier vide)
-  uml/                 (dossier vide)
+    cdc-technique.md      (fichier principal du CDC — vide pour l'instant)
+  apps/                    (code source — plus tard)
+  research/                (benchmarks & POC — plus tard)
   .github/
     pull_request_template.md
   README.md
 ```
+
+> **Note :** les dossiers `apps/` et `research/` seront utilises quand vous commencerez a coder. Pour l'instant, ajoutez juste un fichier `.gitkeep` dans chacun pour que Git les suive.
 
 ## Template PR (minimal)
 
@@ -48,7 +43,8 @@ nerd-tickets/
 
 ## Livrable
 - 1 commit initial par membre
-- Repo pret avec la structure ci-dessus
+- Repo pret avec la structure monorepo ci-dessus
+- README.md avec le nom du projet et les membres de l'equipe
 
 ## Aide
 
@@ -70,4 +66,12 @@ git clone <url>
 git add .
 git commit -m "init: add team member Alice"
 git push origin main
+```
+
+### Creer les dossiers vides
+
+```bash
+mkdir -p docs apps research .github
+touch docs/cdc-technique.md
+touch apps/.gitkeep research/.gitkeep
 ```

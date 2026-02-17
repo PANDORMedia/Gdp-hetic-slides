@@ -2,7 +2,7 @@
 
 Slides de formation Gestion de Projet couvrant Use Cases, UML, Git collaboratif, reviews, conflits et release.
 
-Fil rouge : **NerdTickets** — un mini-produit de gestion de tickets en equipe.
+Projets reels : **Flipper** ou **Robotique** — Livrable : Cahier des Charges technique v1.
 
 ## Contenu
 

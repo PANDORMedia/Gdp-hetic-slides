@@ -915,7 +915,7 @@
 
   <header>
     <div class="nav-container">
-      <div class="logo">GDP<span>/NerdTickets</span></div>
+      <div class="logo">GDP<span>/Projets</span></div>
 
       <nav class="day-nav">
         <button class="day-btn active" data-day="1">JOUR 1</button>
@@ -962,57 +962,147 @@
       <!-- Du besoin -> Use-cases -> Repo collaboratif -->
 
       <!-- J1.01 - Titre -->
-      <div class="slide" data-day="1" data-note="INTRO — Se presenter. Expliquer : 2 jours, 1 fil rouge = NerdTickets. J1 = cadrage projet, besoin et repo collaboratif. J2 = industrialiser (review, conflits, CI, release). Equipes avec roles tournants.">
+      <div class="slide" data-day="1" data-note="INTRO — Se presenter. Expliquer : 2 jours, 1 livrable = CDC technique applique a votre vrai projet (Flipper ou Robotique). J1 = cadrage projet, besoin et repo collaboratif. J2 = industrialiser (review, conflits, CI, release) + sprint CDC. Equipes avec roles tournants.">
         <div class="slide-content hero-slide">
           <span class="slide-number">J1.01</span>
           <h1 class="slide-title title-hero">Gestion de Projet</h1>
           <p class="slide-subtitle" style="text-align: center; margin-top: -1rem;">UML, Git & Collaboration</p>
+          <p style="font-size: 1.1rem; color: var(--accent-amber); text-align: center; margin-top: 1rem;">Applique a votre vrai projet</p>
           <p class="author">Sion GENDERS</p>
           <p class="linkedin"><a href="https://www.linkedin.com/in/sion-gdrs/" target="_blank">linkedin.com/in/sion-gdrs</a></p>
         </div>
       </div>
 
-      <!-- J1.02 - Fil rouge -->
-      <div class="slide" data-day="1" data-note="FIL ROUGE — Presenter NerdTickets : un mini-produit de tickets. Assez riche pour UML (acteurs, use cases, sequences) et parfait pour Git (issues/PR/reviews/conflits). Montrer que tout ce qu'on produit vit dans le repo.">
+      <!-- J1.02 - Vos projets -->
+      <div class="slide" data-day="1" data-note="VOS PROJETS — Presenter les 2 projets. Chaque equipe choisira l'un des deux. Flipper = Web + Hardware tangible. Robot = IA + Systemes. Les deux mobilisent IoT, collaboration Git, et tout le process qu'on va poser. Le livrable de ces 2 jours : un CDC technique v1 pour votre projet.">
         <div class="slide-content">
           <span class="slide-number">J1.02</span>
-          <h1 class="slide-title">Fil rouge : NerdTickets</h1>
-          <div class="two-col">
-            <div>
-              <p>Une app de gestion de tickets :</p>
-              <ul>
-                <li>Creer des tickets</li>
-                <li>Assigner a un membre</li>
-                <li>Suivre un statut</li>
-                <li>Commenter</li>
-                <li>Exporter un recap</li>
+          <h1 class="slide-title">Vos projets</h1>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div class="kanban-card" style="border-left: 3px solid var(--accent-blue);">
+              <h4 style="color: var(--accent-blue);">Projet Flipper</h4>
+              <p>Flipper virtuel + controleurs physiques</p>
+              <ul style="font-size: 0.85rem; margin-top: 0.5rem;">
+                <li>Three.js + Cannon.js (3D / physique)</li>
+                <li>WebSocket + MQTT</li>
+                <li>ESP32 / Arduino</li>
+                <li>3 ecrans synchronises</li>
               </ul>
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap;">
+                <span class="badge" style="background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.4); font-size: 0.75rem;">Web</span>
+                <span class="badge" style="background: rgba(16,185,129,0.2); color: var(--accent-emerald); border: 1px solid rgba(16,185,129,0.4); font-size: 0.75rem;">IoT</span>
+                <span class="badge" style="background: rgba(139,92,246,0.2); color: var(--accent-violet); border: 1px solid rgba(139,92,246,0.4); font-size: 0.75rem;">Hardware</span>
+              </div>
+            </div>
+            <div class="kanban-card" style="border-left: 3px solid var(--accent-emerald);">
+              <h4 style="color: var(--accent-emerald);">Projet Robotique</h4>
+              <p>Robot d'assistance autonome</p>
+              <ul style="font-size: 0.85rem; margin-top: 0.5rem;">
+                <li>ROS 2 + Navigation (SLAM)</li>
+                <li>Dashboard web temps reel</li>
+                <li>LiDAR, Camera, IMU</li>
+                <li>Interface accessible</li>
+              </ul>
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap;">
+                <span class="badge" style="background: rgba(16,185,129,0.2); color: var(--accent-emerald); border: 1px solid rgba(16,185,129,0.4); font-size: 0.75rem;">ROS</span>
+                <span class="badge" style="background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.4); font-size: 0.75rem;">Web</span>
+                <span class="badge" style="background: rgba(245,158,11,0.2); color: var(--accent-amber); border: 1px solid rgba(245,158,11,0.4); font-size: 0.75rem;">IA</span>
+              </div>
+            </div>
+          </div>
+          <div class="info-box warning" style="margin-top: 1.5rem;">
+            <div class="info-box-title">EQUIPES</div>
+            <p>3-4 personnes, roles tournants (PM/Analyste, Dev A, Dev B, Reviewer/Release). Tout ce qui est produit <strong>vit dans le repo</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.03 - Livrable CDC -->
+      <div class="slide" data-day="1" data-note="LIVRABLE — Annoncer le deliverable de ces 2 jours : un CDC technique v1. Expliquer les 9 sections. Montrer que chaque exercice nourrit une section du CDC. A la fin de J2 ils presentent leur CDC complet en 10 min.">
+        <div class="slide-content">
+          <span class="slide-number">J1.03</span>
+          <h1 class="slide-title">Votre livrable : CDC technique</h1>
+          <p>En 2 jours, vous produisez un <strong>Cahier des Charges technique v1</strong> pour votre projet.</p>
+          <div class="two-col" style="margin-top: 1.5rem;">
+            <div>
+              <h3>9 sections du CDC</h3>
+              <ol style="font-size: 0.9rem;">
+                <li>Vision & personas</li>
+                <li>Objectifs & non-objectifs</li>
+                <li>Use cases (6 min, 2 detailles)</li>
+                <li>Architecture macro</li>
+                <li>Diagrammes UML</li>
+                <li>Stack technique & justification</li>
+                <li>Risques identifies</li>
+                <li>Conventions equipe (Git, review)</li>
+                <li>Roadmap macro</li>
+              </ol>
             </div>
             <div>
-              <div class="info-box">
-                <div class="info-box-title">REGLE D'OR</div>
-                <p>Tout ce qui est produit (use cases, diagrammes, regles) <strong>vit dans le repo</strong>.</p>
+              <div class="info-box success">
+                <div class="info-box-title">FORMAT</div>
+                <p><code>docs/cdc-technique.md</code> dans votre repo monorepo</p>
+              </div>
+              <div class="info-box" style="margin-top: 1rem;">
+                <div class="info-box-title">PRESENTATION</div>
+                <p>10 min par equipe en fin de J2. On valide votre CDC.</p>
               </div>
               <div class="info-box warning" style="margin-top: 1rem;">
-                <div class="info-box-title">EQUIPES</div>
-                <p>Roles tournants : PM/Analyste, Dev A, Dev B, Reviewer/Release.</p>
+                <div class="info-box-title">COLLABORATION</div>
+                <p>Tout passe par <strong>PR + review</strong>. Aucun merge direct sur main.</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- J1.03 - Plan du jour -->
-      <div class="slide" data-day="1" data-note="PLAN — Derouler rapidement les blocs. Insister : chaque bloc produit un livrable concret (PR mergee). La retro de fin permet d'ajuster les regles pour le J2.">
+      <!-- J1.04 - Structure monorepo -->
+      <div class="slide" data-day="1" data-note="MONOREPO — Presenter la structure du repo projet. docs/ pour le CDC, apps/ pour le code a venir, research/ pour les explorations techniques futures. .github/ pour les templates PR et CI. Insister : cette structure sert des maintenant ET quand ils coderont.">
+        <div class="slide-content">
+          <span class="slide-number">J1.04</span>
+          <h1 class="slide-title">Structure monorepo</h1>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Un repo, tout dedans</h3>
+              <pre><code><span class="keyword">mon-projet/</span>
+  <span class="type">docs/</span>
+    cdc-technique.md    <span class="comment"># le livrable</span>
+  <span class="type">apps/</span>               <span class="comment"># code a venir</span>
+  <span class="type">research/</span>           <span class="comment"># explorations futures</span>
+  <span class="type">.github/</span>
+    pull_request_template.md
+  README.md</code></pre>
+            </div>
+            <div>
+              <div class="info-box">
+                <div class="info-box-title">docs/</div>
+                <p>Tout le CDC vit ici. C'est la <strong>source de verite</strong> du projet.</p>
+              </div>
+              <div class="info-box warning" style="margin-top: 1rem;">
+                <div class="info-box-title">research/</div>
+                <p>Pour plus tard : "Cannon.js ou Rapier ?", "MQTT ou WebSocket ?". Code jetable, jamais en prod.</p>
+              </div>
+              <div class="info-box success" style="margin-top: 1rem;">
+                <div class="info-box-title">apps/</div>
+                <p>Le code viendra ici quand vous implementerez.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J1.05 - Plan du jour -->
+      <div class="slide" data-day="1" data-note="PLAN — Derouler rapidement les blocs. Insister : chaque bloc produit une section du CDC via une PR mergee. La retro de fin permet d'ajuster les regles pour le J2.">
         <div class="slide-content" style="text-align: center;">
-          <span class="slide-number">J1.03</span>
+          <span class="slide-number">J1.05</span>
           <h1 class="slide-title title-plan">Jour 1</h1>
           <ol style="display: inline-block; text-align: left;">
+            <li>Vos projets & livrable CDC</li>
             <li>Piliers GP : cadrage, priorisation, risques</li>
-            <li>Mise en place du repo</li>
-            <li>Vision & perimetre</li>
-            <li>Use cases</li>
-            <li>UML "utile"</li>
+            <li>Mise en place du monorepo</li>
+            <li>Vision & perimetre (CDC section 1-2)</li>
+            <li>Use cases (CDC section 3)</li>
+            <li>UML "utile" (CDC section 5)</li>
             <li>Collaboration Git</li>
             <li>Mini retro</li>
           </ol>
@@ -1072,11 +1162,11 @@
               </ul>
             </div>
             <div>
-              <pre style="font-size: 0.85rem;"><code>Backlog v0 (exemple)
-MUST   - Creer ticket
-MUST   - Assigner ticket
-SHOULD - Commenter ticket
-COULD  - Export recap
+              <pre style="font-size: 0.85rem;"><code>Backlog v0 (exemple Flipper)
+MUST   - Physique bille + flippers
+MUST   - Synchroniser 3 ecrans
+SHOULD - Scores temps reel
+COULD  - Mode multijoueur
 
 Definition of Done
 - Issue liee
@@ -1139,10 +1229,11 @@ Action: PR plus petites</code></pre>
           <p><span class="badge badge-do">DO</span></p>
           <div class="two-col" style="margin-top: 2rem;">
             <div>
-              <h3>Structure du repo</h3>
-              <pre><code>/docs/vision.md
-/docs/use-cases/
-/uml/
+              <h3>Structure monorepo</h3>
+              <pre><code>docs/
+  cdc-technique.md
+apps/
+research/
 .github/pull_request_template.md
 README.md</code></pre>
             </div>
@@ -1163,7 +1254,7 @@ README.md</code></pre>
       </div>
 
       <!-- J1.05 - Vision SHOW -->
-      <div class="slide" data-day="1" data-note="SHOW — Ecrire en live une vision en 8 lignes + 3 non-objectifs. Montrer que c'est rapide et utile : ca cadre le projet, ca evite le scope creep. Exemple NerdTickets : 'Permettre a une equipe de gerer ses tickets sans quitter son workflow Git'.">
+      <div class="slide" data-day="1" data-note="SHOW — Ecrire en live une vision en 8 lignes + 3 non-objectifs. Montrer que c'est rapide et utile : ca cadre le projet, ca evite le scope creep. Exemple Flipper. Montrer ensuite que le meme format marche pour le Robot.">
         <div class="slide-content">
           <span class="slide-number">J1.05</span>
           <h1 class="slide-title">Vision & perimetre</h1>
@@ -1172,26 +1263,26 @@ README.md</code></pre>
             <div>
               <h3>Vision (1 phrase)</h3>
               <div class="info-box" style="margin-top: 0.5rem;">
-                <p>"NerdTickets permet a une equipe de gerer ses tickets de dev sans quitter son workflow Git."</p>
+                <p>"Flipper permet a des joueurs de vivre une experience de flipper immersive combinant un jeu 3D web et des controleurs physiques connectes."</p>
               </div>
               <h3>3 objectifs</h3>
               <ol>
-                <li>Creer et assigner des tickets</li>
-                <li>Suivre les statuts (open / in-progress / done)</li>
-                <li>Commenter et exporter un recap</li>
+                <li>Simuler la physique d'un flipper en 3D</li>
+                <li>Connecter des controleurs physiques (ESP32)</li>
+                <li>Synchroniser 3 ecrans en temps reel</li>
               </ol>
             </div>
             <div>
               <h3>3 non-objectifs</h3>
               <ul class="crosslist">
-                <li>Pas de notifications temps reel</li>
-                <li>Pas d'integration Slack/Discord</li>
-                <li>Pas de gestion de sprints</li>
+                <li>Pas de mode multijoueur en ligne</li>
+                <li>Pas d'editeur de tables personnalisees</li>
+                <li>Pas de marketplace de composants</li>
               </ul>
               <h3>2 personas</h3>
               <ul>
-                <li><strong>Alice</strong> — Dev frontend, veut voir ses tickets vite</li>
-                <li><strong>Bob</strong> — Tech Lead, veut la vue d'ensemble</li>
+                <li><strong>Lea</strong> — Etudiante dev, veut voir le flipper reagir a ses controleurs</li>
+                <li><strong>Marc</strong> — Responsable technique, veut une archi claire et testable</li>
               </ul>
             </div>
           </div>
@@ -1199,14 +1290,14 @@ README.md</code></pre>
       </div>
 
       <!-- J1.06 - Vision DO -->
-      <div class="slide" data-day="1" data-note="DO — Par equipe. Ecrire dans docs/vision.md : 1 phrase vision, 3 objectifs, 3 non-objectifs, 2 personas courts. PR #1 avec review obligatoire. Circuler pour debloquer." data-exercise="../exercises/01-vision-personas.md">
+      <div class="slide" data-day="1" data-note="DO — Par equipe. Ecrire dans docs/cdc-technique.md (section 1-2) : 1 phrase vision, 3 objectifs, 3 non-objectifs, 2 personas courts. PR #1 avec review obligatoire. Circuler pour debloquer." data-exercise="../exercises/01-vision-personas.md">
         <div class="slide-content">
           <span class="slide-number">J1.06</span>
           <h1 class="slide-title">A vous : Vision + Personas</h1>
           <p><span class="badge badge-do">DO</span></p>
           <div class="two-col" style="margin-top: 2rem;">
             <div>
-              <h3>Par equipe</h3>
+              <h3>Par equipe, pour VOTRE projet</h3>
               <ol>
                 <li>1 phrase <strong>vision</strong></li>
                 <li>3 <strong>objectifs</strong></li>
@@ -1217,12 +1308,12 @@ README.md</code></pre>
             <div>
               <div class="info-box success">
                 <div class="info-box-title">LIVRABLE</div>
-                <p>PR #1 "Vision + Personas"</p>
-                <p style="font-size: 1.1rem; margin-top: 0.5rem;">Review obligatoire par une autre equipe si possible.</p>
+                <p>PR #1 "CDC section 1 : Vision + Personas"</p>
+                <p style="font-size: 1.1rem; margin-top: 0.5rem;">Review obligatoire par un pair.</p>
               </div>
               <div class="info-box warning" style="margin-top: 1rem;">
                 <div class="info-box-title">FICHIER</div>
-                <p><code>docs/vision.md</code></p>
+                <p><code>docs/cdc-technique.md</code> (sections 1-2)</p>
               </div>
             </div>
           </div>
@@ -1230,23 +1321,23 @@ README.md</code></pre>
       </div>
 
       <!-- J1.07 - Use cases SHOW -->
-      <div class="slide" data-day="1" data-note="SHOW — Prendre le besoin 'Creer un ticket'. Construire en live : Acteurs -> but -> scenarios (happy path + 2 exceptions). Montrer le template. Insister : un use case decrit le QUOI, pas le COMMENT technique.">
+      <div class="slide" data-day="1" data-note="SHOW — Prendre un besoin du projet Flipper : 'Lancer une partie'. Construire en live : Acteurs -> but -> scenarios (happy path + 2 exceptions). Montrer le template. Insister : un use case decrit le QUOI, pas le COMMENT technique.">
         <div class="slide-content">
           <span class="slide-number">J1.07</span>
           <h1 class="slide-title">Use Cases</h1>
           <p><span class="badge badge-show">SHOW</span></p>
           <div class="two-col" style="margin-top: 1.5rem;">
             <div>
-              <h3>Besoin : "Creer un ticket"</h3>
+              <h3>Besoin : "Lancer une partie"</h3>
               <ul>
-                <li><strong>Acteur :</strong> Utilisateur (membre equipe)</li>
-                <li><strong>But :</strong> Creer un ticket avec titre + priorite</li>
-                <li><strong>Happy path :</strong> formulaire -> saisie -> validation -> ticket cree</li>
+                <li><strong>Acteur :</strong> Joueur</li>
+                <li><strong>But :</strong> Demarrer une partie avec les controleurs connectes</li>
+                <li><strong>Happy path :</strong> connexion controleurs -> calibration -> lancement -> jeu actif</li>
               </ul>
               <h3 style="margin-top: 1.5rem;">Exceptions</h3>
               <ul>
-                <li>Titre vide -> erreur "Titre obligatoire"</li>
-                <li>Erreur serveur -> "Reessayez plus tard"</li>
+                <li>Controleur non detecte -> message "Connectez votre controleur"</li>
+                <li>Latence trop haute -> mode degradation gracieuse</li>
               </ul>
             </div>
             <div>
@@ -1274,9 +1365,9 @@ Notes / regles metier</code></pre>
             <div>
               <div class="info-box danger">
                 <div class="info-box-title">AVANT (mal ecrit)</div>
-                <p style="font-size: 1.2rem;">"Le systeme fait un POST /api/tickets avec un JSON qui contient title et priority, valide le schema, insere en base et renvoie un 201."</p>
+                <p style="font-size: 1.2rem;">"Le serveur Node.js recoit un event WebSocket 'start_game', initialise Cannon.js avec gravity -9.81, spawn la bille a vec3(0,1,0) et broadcast un JSON sur MQTT topic /flipper/state."</p>
                 <ul style="margin-top: 1rem;">
-                  <li>Trop technique (HTTP, JSON, SQL)</li>
+                  <li>Trop technique (WebSocket, Cannon.js, MQTT)</li>
                   <li>Pas d'acteur visible</li>
                   <li>Pas de scenario utilisateur</li>
                 </ul>
@@ -1285,11 +1376,11 @@ Notes / regles metier</code></pre>
             <div>
               <div class="info-box success">
                 <div class="info-box-title">APRES (refacto)</div>
-                <p style="font-size: 1.2rem;">"L'utilisateur cree un nouveau ticket en saisissant un titre et une priorite. Le systeme confirme la creation."</p>
+                <p style="font-size: 1.2rem;">"Le joueur lance une nouvelle partie. Le systeme verifie la connexion des controleurs et lance la bille."</p>
                 <ul style="margin-top: 1rem;">
-                  <li>Acteur clair (Utilisateur)</li>
-                  <li>Action metier (creer un ticket)</li>
-                  <li>Resultat observable (confirmation)</li>
+                  <li>Acteur clair (Joueur)</li>
+                  <li>Action metier (lancer une partie)</li>
+                  <li>Resultat observable (bille lancee)</li>
                 </ul>
               </div>
             </div>
@@ -1323,10 +1414,9 @@ Notes / regles metier</code></pre>
                 <p>PR #2 "Use-cases v1" (avec review)</p>
               </div>
               <div class="info-box warning" style="margin-top: 1rem;">
-                <div class="info-box-title">FICHIERS</div>
-                <p><code>docs/use-cases/UC-01.md</code></p>
-                <p><code>docs/use-cases/UC-02.md</code></p>
-                <p style="font-size: 1.1rem; margin-top: 0.3rem;">... un fichier par use case</p>
+                <div class="info-box-title">FICHIER</div>
+                <p><code>docs/cdc-technique.md</code> (section 3)</p>
+                <p style="font-size: 1.1rem; margin-top: 0.3rem;">Use cases de VOTRE projet (Flipper ou Robot)</p>
               </div>
             </div>
           </div>
@@ -1450,7 +1540,7 @@ Notes / regles metier</code></pre>
           </div>
           <div class="info-box success" style="margin-top: 2rem;">
             <div class="info-box-title">AUJOURD'HUI</div>
-            <p>On pratique les 3 premiers sur NerdTickets. Le diagramme de classes sera utile quand on codera.</p>
+            <p>On pratique les 3 premiers sur votre projet. Le diagramme de classes sera utile quand vous coderez.</p>
           </div>
         </div>
       </div>
@@ -1482,11 +1572,11 @@ left to right direction
 actor Utilisateur as U
 actor Admin as A
 
-rectangle NerdTickets {
-  usecase "Creer ticket" as UC1
-  usecase "Assigner" as UC2
-  usecase "Commenter" as UC4
-  usecase "Exporter" as UC5
+rectangle Flipper {
+  usecase "Lancer partie" as UC1
+  usecase "Connecter controleur" as UC2
+  usecase "Voir scores" as UC4
+  usecase "Configurer table" as UC5
   usecase "S'authentifier" as Auth
 
   UC1 ..> Auth : &lt;&lt;include&gt;&gt;
@@ -1531,16 +1621,16 @@ participant "UI" as UI
 participant "API" as API
 participant "DB" as DB
 
-U -> UI : clique "Nouveau ticket"
-UI -> API : POST /tickets
-API -> DB : INSERT ticket
-DB --> API : ticket cree
-API --> UI : 201 Created
-UI --> U : affiche ticket
+U -> UI : clique "Nouvelle partie"
+UI -> API : startGame()
+API -> DB : INSERT game
+DB --> API : game created
+API --> UI : 200 OK
+UI --> U : affiche "Ready"
 
-alt titre vide
-  API --> UI : 400 Bad Request
-  UI --> U : "Titre obligatoire"
+alt table non calibree
+  API --> UI : erreur calibration
+  UI --> U : "Calibrez la table"
 end
 @enduml</code></pre>
             </div>
@@ -1549,7 +1639,7 @@ end
       </div>
 
       <!-- J1.15 - Diagramme d'Etat : cours -->
-      <div class="slide" data-day="1" data-note="COURS — Le diagramme d'etat (statechart) modelise le cycle de vie d'un OBJET. Pas du systeme entier, d'un seul objet (ici un ticket). Elements : etats (rectangles arrondis), transitions (fleches + evenement), etat initial (point noir), etat final (cible).">
+      <div class="slide" data-day="1" data-note="COURS — Le diagramme d'etat (statechart) modelise le cycle de vie d'un OBJET. Pas du systeme entier, d'un seul objet (ici une partie de flipper, une mission du robot...). Elements : etats (rectangles arrondis), transitions (fleches + evenement), etat initial (point noir), etat final (cible).">
         <div class="slide-content">
           <span class="slide-number">J1.15</span>
           <h1 class="slide-title">Diag. d'Etat (Statechart)</h1>
@@ -1566,24 +1656,24 @@ end
               </ul>
               <div class="info-box" style="margin-top: 1rem;">
                 <div class="info-box-title">QUESTION CLE</div>
-                <p>Quels sont les etats possibles de mon <strong>ticket</strong> ?</p>
+                <p>Quels sont les etats possibles de mon <strong>objet cle</strong> ?</p>
               </div>
             </div>
             <div>
               <pre style="font-size: 0.8rem;"><code>@startuml
-[*] --> Open
-Open --> InProgress : assigner
-InProgress --> InReview : soumettre
-InReview --> Done : approuver
-InReview --> InProgress : demander\nchangements
-Done --> [*]
-Open --> Cancelled : annuler
-InProgress --> Cancelled : annuler
+[*] --> Idle
+Idle --> Calibration : startGame
+Calibration --> Ready : tableReady
+Ready --> EnJeu : launchBall
+EnJeu --> BillePerdue : drain
+BillePerdue --> EnJeu : billesRestantes > 0
+BillePerdue --> GameOver : billesRestantes == 0
+GameOver --> [*]
 
-state InReview {
-  [*] --> Reviewing
-  Reviewing --> Approved
-  Reviewing --> NeedsWork
+state EnJeu {
+  [*] --> Normal
+  Normal --> MultiBall
+  MultiBall --> Normal
 }
 @enduml</code></pre>
             </div>
@@ -1613,29 +1703,28 @@ state InReview {
             </div>
             <div>
               <pre style="font-size: 0.78rem;"><code>@startuml
-class Ticket {
+class Game {
   - id: int
-  - title: string
-  - status: Status
-  - priority: Priority
-  + assign(user: User): void
-  + changeStatus(s: Status): void
+  - score: int
+  - status: GameState
+  - ballsLeft: int
+  + start(): void
+  + launchBall(force: float): void
 }
 
-class User {
+class Player {
   - id: int
   - name: string
-  - email: string
+  - highScore: int
 }
 
-class Comment {
-  - content: string
-  - createdAt: datetime
+class TableConfig {
+  - bumperForce: float
+  - flipperSpeed: float
 }
 
-Ticket "1" --> "0..*" Comment
-Ticket "0..*" --> "1" User : assignee
-User "1" --> "0..*" Comment : author
+Game "0..*" --> "1" Player
+Game "1" --> "1" TableConfig
 @enduml</code></pre>
             </div>
           </div>
@@ -1730,15 +1819,15 @@ stop
       </div>
 
       <!-- J1.19 - UML applique : consigne DO -->
-      <div class="slide" data-day="1" data-note="DO — Maintenant ils pratiquent. 3 diagrammes a produire sur NerdTickets. Chaque diagramme repond a une question vue en cours. Les fichiers vont dans /uml/.">
+      <div class="slide" data-day="1" data-note="DO — Maintenant ils pratiquent. 3 diagrammes a produire sur leur projet. Chaque diagramme repond a une question vue en cours. Les fichiers vont dans le CDC section 5.">
         <div class="slide-content">
           <span class="slide-number">J1.19</span>
-          <h1 class="slide-title">A vous : UML sur NerdTickets</h1>
+          <h1 class="slide-title">A vous : UML sur votre projet</h1>
           <p><span class="badge badge-do">DO</span></p>
           <div class="three-col" style="margin-top: 2rem;">
             <div class="kanban-card">
               <h4 style="color: var(--accent-blue);">1. Use Case UML</h4>
-              <p>Acteurs + use cases de NerdTickets</p>
+              <p>Acteurs + use cases de votre projet</p>
               <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">-> uml/use-case-diagram.puml</p>
             </div>
             <div class="kanban-card">
@@ -1747,46 +1836,46 @@ stop
               <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">-> uml/sequence-uc01.puml</p>
             </div>
             <div class="kanban-card">
-              <h4 style="color: var(--accent-amber);">3. Etat du ticket</h4>
-              <p>Cycle de vie : open -> done</p>
-              <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">-> uml/ticket-state.puml</p>
+              <h4 style="color: var(--accent-amber);">3. Etat</h4>
+              <p>Cycle de vie : idle -> done</p>
+              <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">-> uml/state-diagram.puml</p>
             </div>
           </div>
           <div class="info-box success" style="margin-top: 2rem;">
             <div class="info-box-title">LIVRABLE</div>
-            <p>PR #3 "UML v1"</p>
+            <p>PR #3 "CDC section 5 : UML v1"</p>
           </div>
         </div>
       </div>
 
       <!-- J1.20 - UML Use Case applique -->
-      <div class="slide" data-day="1" data-note="EXEMPLE — Montrer le diagramme use case NerdTickets complet. Les acteurs a gauche, les use cases dans le rectangle. Rappeler include/extend. Puis laisser faire." data-exercise="../exercises/03-uml.md">
+      <div class="slide" data-day="1" data-note="EXEMPLE — Montrer le diagramme use case Flipper complet. Les acteurs a gauche, les use cases dans le rectangle. Rappeler include/extend. Puis laisser faire." data-exercise="../exercises/03-uml.md">
         <div class="slide-content">
           <span class="slide-number">J1.20</span>
-          <h1 class="slide-title">Exemple : Use Case NerdTickets</h1>
+          <h1 class="slide-title">Exemple : Use Case Flipper</h1>
           <div class="two-col">
             <div>
               <pre style="font-size: 0.82rem;"><code>@startuml
 left to right direction
-actor Utilisateur as U
+actor Joueur as J
 actor Admin as A
 
-rectangle NerdTickets {
-  usecase "Creer ticket" as UC1
-  usecase "Assigner" as UC2
-  usecase "Changer statut" as UC3
-  usecase "Commenter" as UC4
-  usecase "Exporter recap" as UC5
-  usecase "Filtrer tickets" as UC6
+rectangle Flipper {
+  usecase "Lancer partie" as UC1
+  usecase "Connecter controleur" as UC2
+  usecase "Jouer (flippers)" as UC3
+  usecase "Voir scores" as UC4
+  usecase "Configurer table" as UC5
+  usecase "Calibrer controleur" as UC6
 }
 
-U --> UC1
-U --> UC2
-U --> UC3
-U --> UC4
-U --> UC6
+J --> UC1
+J --> UC2
+J --> UC3
+J --> UC4
 A --> UC5
-A --|> U
+UC2 --> UC6 : &lt;&lt;include&gt;&gt;
+A --|> J
 @enduml</code></pre>
             </div>
             <div>
@@ -1807,28 +1896,28 @@ A --|> U
       </div>
 
       <!-- J1.21 - UML Sequence applique -->
-      <div class="slide" data-day="1" data-note="EXEMPLE — Montrer le diagramme de sequence pour 'Creer un ticket' avec le fragment alt pour l'erreur. Insister : c'est le scenario nominal du use case, traduit en interactions." data-exercise="../exercises/03-uml.md">
+      <div class="slide" data-day="1" data-note="EXEMPLE — Montrer le diagramme de sequence pour 'Lancer une partie' (Flipper) avec le fragment alt pour l'erreur. Insister : c'est le scenario nominal du use case, traduit en interactions." data-exercise="../exercises/03-uml.md">
         <div class="slide-content">
           <span class="slide-number">J1.21</span>
-          <h1 class="slide-title">Exemple : Sequence "Creer ticket"</h1>
+          <h1 class="slide-title">Exemple : Sequence "Lancer partie"</h1>
           <div class="two-col">
             <div>
               <pre style="font-size: 0.82rem;"><code>@startuml
-actor Utilisateur as U
-participant "UI" as UI
-participant "API" as API
-participant "DB" as DB
+actor Joueur as J
+participant "UI Web" as UI
+participant "Server WS" as WS
+participant "ESP32" as ESP
 
-U -> UI : clique "Nouveau ticket"
-UI -> API : POST /tickets
-API -> DB : INSERT ticket
-DB --> API : ticket cree
-API --> UI : 201 Created
-UI --> U : affiche ticket
+J -> UI : clique "Nouvelle partie"
+UI -> WS : connect WebSocket
+WS -> ESP : MQTT ping controleurs
+ESP --> WS : status: ready
+WS --> UI : controleurs OK
+UI --> J : affiche "Pret !"
 
-alt titre vide
-  API --> UI : 400 Bad Request
-  UI --> U : "Titre obligatoire"
+alt controleur absent
+  ESP --> WS : timeout
+  WS --> UI : "Connectez controleur"
 end
 @enduml</code></pre>
             </div>
@@ -1849,33 +1938,34 @@ end
       </div>
 
       <!-- J1.22 - UML Etat applique -->
-      <div class="slide" data-day="1" data-note="EXEMPLE — Montrer le cycle de vie d'un ticket NerdTickets. Chaque fleche = une action. Rappeler les elements du cours : etat, transition, evenement." data-exercise="../exercises/03-uml.md">
+      <div class="slide" data-day="1" data-note="EXEMPLE — Montrer le cycle de vie d'une partie de Flipper. Chaque fleche = une action. Rappeler les elements du cours : etat, transition, evenement." data-exercise="../exercises/03-uml.md">
         <div class="slide-content">
           <span class="slide-number">J1.22</span>
-          <h1 class="slide-title">Exemple : Etat du ticket</h1>
+          <h1 class="slide-title">Exemple : Etat d'une partie</h1>
           <div class="two-col">
             <div>
               <pre style="font-size: 0.82rem;"><code>@startuml
-[*] --> Open
-Open --> InProgress : assigner
-InProgress --> InReview : soumettre
-InReview --> Done : approuver
-InReview --> InProgress : changements
-Done --> [*]
-Open --> Cancelled : annuler
-InProgress --> Cancelled : annuler
+[*] --> Idle
+Idle --> Calibration : connecter controleurs
+Calibration --> Ready : calibration OK
+Ready --> EnJeu : lancer bille
+EnJeu --> BillePerdue : bille sortie
+BillePerdue --> EnJeu : billes restantes > 0
+BillePerdue --> GameOver : plus de billes
+GameOver --> [*]
+Idle --> [*] : annuler
 @enduml</code></pre>
             </div>
             <div>
               <h3>Cycle de vie</h3>
               <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
-                <span class="badge" style="background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.4);">Open</span>
+                <span class="badge" style="background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.4);">Idle</span>
                 <span class="flow-arrow" style="font-size: 1.2rem; padding: 0;">-></span>
-                <span class="badge" style="background: rgba(245,158,11,0.2); color: var(--accent-amber); border: 1px solid rgba(245,158,11,0.4);">InProgress</span>
+                <span class="badge" style="background: rgba(245,158,11,0.2); color: var(--accent-amber); border: 1px solid rgba(245,158,11,0.4);">Ready</span>
                 <span class="flow-arrow" style="font-size: 1.2rem; padding: 0;">-></span>
-                <span class="badge" style="background: rgba(139,92,246,0.2); color: var(--accent-violet); border: 1px solid rgba(139,92,246,0.4);">InReview</span>
+                <span class="badge" style="background: rgba(139,92,246,0.2); color: var(--accent-violet); border: 1px solid rgba(139,92,246,0.4);">EnJeu</span>
                 <span class="flow-arrow" style="font-size: 1.2rem; padding: 0;">-></span>
-                <span class="badge" style="background: rgba(16,185,129,0.2); color: var(--accent-emerald); border: 1px solid rgba(16,185,129,0.4);">Done</span>
+                <span class="badge" style="background: rgba(16,185,129,0.2); color: var(--accent-emerald); border: 1px solid rgba(16,185,129,0.4);">GameOver</span>
               </div>
               <div class="info-box" style="margin-top: 1.5rem;">
                 <div class="info-box-title">CLE</div>
@@ -1942,7 +2032,7 @@ feature:  C---D---E
       </div>
 
       <!-- J1.24 - Strategies de branching COURS -->
-      <div class="slide" data-day="1" data-note="COURS — Presenter les 3 strategies principales. Expliquer qu'on utilise GitHub Flow pour NerdTickets car c'est le plus simple et adapte a un petit projet. GitFlow = overkill ici. Trunk-based = pour les equipes avancees avec CI solide.">
+      <div class="slide" data-day="1" data-note="COURS — Presenter les 3 strategies principales. Expliquer qu'on utilise GitHub Flow pour votre projet car c'est le plus simple et adapte a un petit projet. GitFlow = overkill ici. Trunk-based = pour les equipes avancees avec CI solide.">
         <div class="slide-content">
           <span class="slide-number">J1.24</span>
           <h1 class="slide-title">Strategies de branching</h1>
@@ -2004,19 +2094,19 @@ feature:  C---D---E
             <div>
               <h3>Exemple de description</h3>
               <pre style="font-size: 0.8rem;"><code>## Description
-Ajout du use case UC-03 "Assigner un ticket"
+Ajout de la section architecture au CDC
 
 ## Issue liee
 Fixes #7
 
 ## Changements
-- Nouveau fichier docs/use-cases/UC-03.md
-- Scenario nominal + 2 extensions
+- Section 4 dans docs/cdc-technique.md
+- Composants principaux + interactions
 
 ## Comment relire
 1. Verifier coherence avec la vision
-2. Verifier le format (template UC)
-3. Extensions realistes ?</code></pre>
+2. Verifier le format (structure CDC)
+3. Composants realistes ?</code></pre>
             </div>
           </div>
         </div>
@@ -2051,7 +2141,7 @@ Fixes #7
               </div>
               <div class="info-box success">
                 <div class="info-box-title">BON</div>
-                <p>"Ce scenario ne couvre pas le cas ou le ticket est deja assigne. Tu veux l'ajouter en extension ?"</p>
+                <p>"Ce scenario ne couvre pas le cas ou la table n'est pas calibree. Tu veux l'ajouter en extension ?"</p>
                 <p>"Le nommage du fichier devrait suivre notre convention UC-XX.md"</p>
               </div>
             </div>
@@ -2060,7 +2150,7 @@ Fixes #7
       </div>
 
       <!-- J1.27 - Merge : les options COURS -->
-      <div class="slide" data-day="1" data-note="COURS — Expliquer les 3 strategies de merge. Montrer les schemas. Pour NerdTickets on recommande Squash and Merge pour garder un historique propre. Rebase = avance, attention.">
+      <div class="slide" data-day="1" data-note="COURS — Expliquer les 3 strategies de merge. Montrer les schemas. On recommande Squash and Merge pour garder un historique propre. Rebase = avance, attention.">
         <div class="slide-content">
           <span class="slide-number">J1.27</span>
           <h1 class="slide-title">Merge : les options</h1>
@@ -2093,8 +2183,8 @@ Fixes #7
         </div>
       </div>
 
-      <!-- J1.28 - Regles Git pour NerdTickets SHOW -->
-      <div class="slide" data-day="1" data-note="SHOW — Poser les regles concretes pour NerdTickets. Montrer les 4 regles imposees. Expliquer Conventional Commits en 2 min. Montrer le nommage de branche feature/<id>-<slug>.">
+      <!-- J1.28 - Regles Git de votre equipe SHOW -->
+      <div class="slide" data-day="1" data-note="SHOW — Poser les regles concretes pour le projet. Montrer les 4 regles imposees. Expliquer Conventional Commits en 2 min. Montrer le nommage de branche feature/<id>-<slug>.">
         <div class="slide-content">
           <span class="slide-number">J1.28</span>
           <h1 class="slide-title">Nos regles Git</h1>
@@ -2134,23 +2224,23 @@ refactor: ... restructuration</code></pre>
           <div class="three-col" style="margin-top: 2rem;">
             <div class="kanban-card">
               <h4>Issue 1</h4>
-              <p>"UC-03 : assigner un ticket"</p>
-              <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-dim);">-> docs/use-cases/UC-03.md</p>
+              <p>"CDC section 4 : architecture macro"</p>
+              <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-dim);">-> docs/cdc-technique.md</p>
             </div>
             <div class="kanban-card">
               <h4>Issue 2</h4>
-              <p>"UML : sequence UC-01"</p>
+              <p>"UML : sequence du UC principal"</p>
               <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-dim);">-> uml/sequence-uc01.puml</p>
             </div>
             <div class="kanban-card">
               <h4>Issue 3</h4>
-              <p>"Docs : conventions commits"</p>
-              <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-dim);">-> docs/collab-git.md</p>
+              <p>"CDC section 8 : conventions equipe"</p>
+              <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-dim);">-> docs/cdc-technique.md</p>
             </div>
           </div>
           <div class="info-box success" style="margin-top: 2rem;">
             <div class="info-box-title">LIVRABLE</div>
-            <p>3 PR mergees + <code>docs/collab-git.md</code></p>
+            <p>3 PR mergees + conventions documentees dans le CDC</p>
           </div>
         </div>
       </div>
@@ -2254,7 +2344,7 @@ refactor: ... restructuration</code></pre>
       <!-- Industrialiser : review, conflits, CI legere, release -->
 
       <!-- J2.01 - Titre -->
-      <div class="slide" data-day="2" data-note="INTRO J2 — Rappeler le fil rouge NerdTickets. J2 = industrialiser : review propre, conflits, CI legere, release. On part de ce qu'ils ont produit hier.">
+      <div class="slide" data-day="2" data-note="INTRO J2 — Rappeler le livrable CDC technique. J2 = industrialiser : review propre, conflits, CI legere, release + sprint CDC l'apres-midi. On part de ce qu'ils ont produit hier.">
         <div class="slide-content hero-slide">
           <span class="slide-number">J2.01</span>
           <h1 class="slide-title title-hero">Jour 2</h1>
@@ -2273,7 +2363,8 @@ refactor: ... restructuration</code></pre>
             <li>Workflow propre : Issues -> PR -> Done</li>
             <li>CI legere & qualite</li>
             <li>Release / versioning / changelog</li>
-            <li>Demo finale & retro</li>
+            <li>Sprint CDC : compiler le document final</li>
+            <li>Demo CDC & retro</li>
           </ol>
         </div>
       </div>
@@ -2391,7 +2482,7 @@ Le scenario modifie par Bob
               <div class="info-box success">
                 <div class="info-box-title">LIVRABLE</div>
                 <p>1 conflit resolu par equipe</p>
-                <p style="margin-top: 0.5rem;">+ section dans <code>docs/collab-git.md</code> : "comment on gere les conflits ici"</p>
+                <p style="margin-top: 0.5rem;">+ section dans <code>docs/conventions.md</code> : "comment on gere les conflits ici"</p>
               </div>
               <div class="info-box warning" style="margin-top: 1rem;">
                 <div class="info-box-title">STRATEGIE</div>
@@ -2421,7 +2512,7 @@ Le scenario modifie par Bob
             <div>
               <h3>Template PR</h3>
               <pre style="font-size: 0.85rem;"><code>## Description
-Ajout UC-04 "Commenter un ticket"
+Ajout section 6 "Stack technique"
 
 ## Issue liee
 Fixes #12
@@ -2440,7 +2531,7 @@ Fixes #12
       </div>
 
       <!-- J2.08 - CI legere SHOW -->
-      <div class="slide" data-day="2" data-note="SHOW — Montrer qu'on peut automatiser des verifications simples sans partir dans DevOps. Un script bash qui verifie les sections obligatoires des use cases. Ou un PR template + checklist stricte.">
+      <div class="slide" data-day="2" data-note="SHOW — Montrer qu'on peut automatiser des verifications simples sans partir dans DevOps. Un script bash qui verifie les sections obligatoires du CDC technique. Ou un PR template + checklist stricte.">
         <div class="slide-content">
           <span class="slide-number">J2.08</span>
           <h1 class="slide-title">CI legere & qualite</h1>
@@ -2449,13 +2540,14 @@ Fixes #12
             <div>
               <h3>Script lint-docs.sh</h3>
               <pre style="font-size: 0.8rem;"><code>#!/usr/bin/env bash
-for file in docs/use-cases/UC-*.md; do
-  for section in "Acteurs" "But" \
-    "Scenario nominal"; do
-    if ! grep -q "## $section" "$file"; then
-      echo "ERREUR: $file manque '$section'"
-    fi
-  done
+CDC="docs/cdc-technique.md"
+for section in "## 1. Vision" \
+  "## 2. Objectifs" \
+  "## 3. Use cases" \
+  "## 4. Architecture"; do
+  if ! grep -q "$section" "$CDC"; then
+    echo "ERREUR: manque '$section'"
+  fi
 done</code></pre>
             </div>
             <div>
@@ -2509,7 +2601,7 @@ done</code></pre>
       </div>
 
       <!-- J2.10 - Release / versioning -->
-      <div class="slide" data-day="2" data-note="DO — Creer CHANGELOG.md, tagger v0.1.0, ecrire une release note. Option : branch release/0.1.0 puis merge vers main. Montrer SemVer rapidement." data-exercise="../exercises/09-release.md">
+      <div class="slide" data-day="2" data-note="DO — Creer CHANGELOG.md, tagger v0.0.1, ecrire une release note. Option : branch release/0.0.1 puis merge vers main. Montrer SemVer rapidement." data-exercise="../exercises/09-release.md">
         <div class="slide-content">
           <span class="slide-number">J2.10</span>
           <h1 class="slide-title">Release & Versioning</h1>
@@ -2519,7 +2611,7 @@ done</code></pre>
               <h3>A faire</h3>
               <ol>
                 <li>Creer <code>CHANGELOG.md</code></li>
-                <li>Tagger <code>v0.1.0</code></li>
+                <li>Tagger <code>v0.0.1</code></li>
                 <li>Ecrire une <strong>release note</strong></li>
                 <li><em>(option)</em> Branche <code>release/0.1.0</code></li>
               </ol>
@@ -2531,9 +2623,9 @@ done</code></pre>
             </div>
             <div>
               <h3>Commandes</h3>
-              <pre style="font-size: 0.9rem;"><code>git tag -a v0.1.0 \
-  -m "v0.1.0 - MVP documentation"
-git push origin v0.1.0</code></pre>
+              <pre style="font-size: 0.9rem;"><code>git tag -a v0.0.1 \
+  -m "v0.0.1 - CDC technique v1"
+git push origin v0.0.1</code></pre>
               <div class="info-box success" style="margin-top: 1rem;">
                 <div class="info-box-title">LIVRABLE</div>
                 <p>Tag + changelog + release note</p>
@@ -2553,10 +2645,10 @@ git push origin v0.1.0</code></pre>
             <div>
               <h3>Chaque equipe montre</h3>
               <ol>
-                <li>1 use case + 1 diagramme associe</li>
-                <li>1 PR "exemplaire"</li>
-                <li>1 conflit resolu</li>
-                <li>1 regle qu'ils gardent "pour la vraie vie"</li>
+                <li>1 section du CDC + 1 diagramme UML</li>
+                <li>1 PR "exemplaire" avec review</li>
+                <li>Le CDC technique compile</li>
+                <li>1 regle d'equipe qu'ils gardent "pour la vraie vie"</li>
               </ol>
             </div>
             <div>
@@ -2653,63 +2745,73 @@ verbe + objet</code></pre>
         </div>
       </div>
 
-      <!-- ========== OUVERTURE : PROJETS J3+ ========== -->
+      <!-- ========== SPRINT CDC + CLOTURE ========== -->
 
-      <!-- J2.14 - Transition projets -->
-      <div class="slide" data-day="2" data-note="TRANSITION — Marquer la fin du cadre theorique. Tout ce qu'ils ont appris (use cases, UML, Git, PR, review, CI, release) va servir CONCRETEMENT des demain sur un vrai projet en equipe.">
-        <div class="slide-content hero-slide">
-          <span class="slide-number" style="opacity: 0.3;">Et maintenant...</span>
-          <h1 class="slide-title title-hero" style="font-size: 3rem;">De la theorie a la pratique</h1>
-          <p class="slide-subtitle" style="text-align: center; margin-top: -0.5rem;">Tout ce que vous avez appris va servir des demain</p>
-        </div>
-      </div>
-
-      <!-- J2.15 - Les 2 projets -->
-      <div class="slide" data-day="2" data-note="OUVERTURE — Presenter les 2 projets. Chaque equipe choisira l'un des deux. Flipper = Web + Hardware tangible. Robot = IA + Systemes. Les deux mobilisent IoT, collaboration Git, et tout le process qu'on vient de poser.">
+      <!-- J2.14 - Sprint CDC technique -->
+      <div class="slide" data-day="2" data-note="SPRINT CDC — L'apres-midi de J2 est consacree a compiler toutes les sections dans docs/cdc-technique.md. Chaque equipe assemble vision, use cases, UML, archi, stack, risques, conventions, roadmap. PR finale. Preparation presentation 10 min." data-exercise="../exercises/10-cdc-technique.md">
         <div class="slide-content">
-          <span class="slide-number">J2.15</span>
-          <h1 class="slide-title">Vos projets</h1>
+          <span class="slide-number">J2.14</span>
+          <h1 class="slide-title">Sprint CDC technique</h1>
+          <p><span class="badge badge-do">DO</span></p>
           <div class="two-col" style="margin-top: 2rem;">
-            <div class="kanban-card" style="border-left: 3px solid var(--accent-blue);">
-              <h4 style="color: var(--accent-blue);">Projet Flipper</h4>
-              <p>Flipper virtuel + controleurs physiques</p>
-              <ul style="font-size: 0.85rem; margin-top: 0.5rem;">
-                <li>Three.js + Cannon.js (3D / physique)</li>
-                <li>WebSocket + MQTT</li>
-                <li>ESP32 / Arduino</li>
-                <li>3 ecrans synchronises</li>
-              </ul>
-              <div style="display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap;">
-                <span class="badge" style="background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.4); font-size: 0.75rem;">Web</span>
-                <span class="badge" style="background: rgba(16,185,129,0.2); color: var(--accent-emerald); border: 1px solid rgba(16,185,129,0.4); font-size: 0.75rem;">IoT</span>
-                <span class="badge" style="background: rgba(139,92,246,0.2); color: var(--accent-violet); border: 1px solid rgba(139,92,246,0.4); font-size: 0.75rem;">Hardware</span>
-              </div>
+            <div>
+              <h3>Assembler le CDC</h3>
+              <ol>
+                <li>Compiler toutes les sections dans <code>docs/cdc-technique.md</code></li>
+                <li>Completer les sections manquantes (archi, stack, risques, roadmap)</li>
+                <li>Verifier la coherence globale</li>
+                <li>PR finale "CDC technique v1"</li>
+              </ol>
             </div>
-            <div class="kanban-card" style="border-left: 3px solid var(--accent-emerald);">
-              <h4 style="color: var(--accent-emerald);">Projet Robotique</h4>
-              <p>Robot d'assistance autonome</p>
-              <ul style="font-size: 0.85rem; margin-top: 0.5rem;">
-                <li>ROS 2 + Navigation (SLAM)</li>
-                <li>Dashboard web temps reel</li>
-                <li>LiDAR, Camera, IMU</li>
-                <li>Interface accessible</li>
-              </ul>
-              <div style="display: flex; gap: 0.5rem; margin-top: 0.8rem; flex-wrap: wrap;">
-                <span class="badge" style="background: rgba(16,185,129,0.2); color: var(--accent-emerald); border: 1px solid rgba(16,185,129,0.4); font-size: 0.75rem;">ROS</span>
-                <span class="badge" style="background: rgba(59,130,246,0.2); color: var(--accent-blue); border: 1px solid rgba(59,130,246,0.4); font-size: 0.75rem;">Web</span>
-                <span class="badge" style="background: rgba(245,158,11,0.2); color: var(--accent-amber); border: 1px solid rgba(245,158,11,0.4); font-size: 0.75rem;">IA</span>
+            <div>
+              <div class="info-box success">
+                <div class="info-box-title">LIVRABLE</div>
+                <p>PR "CDC technique v1" mergee sur main</p>
+              </div>
+              <div class="info-box warning" style="margin-top: 1rem;">
+                <div class="info-box-title">PRESENTATION</div>
+                <p>10 min par equipe. Montrez votre CDC complet.</p>
               </div>
             </div>
           </div>
-          <div class="info-box" style="margin-top: 1.5rem;">
-            <div class="info-box-title">EQUIPES</div>
-            <p>Choix du projet en equipe. Details et inscription demain.</p>
+        </div>
+      </div>
+
+      <!-- J2.15 - Le dossier research/ -->
+      <div class="slide" data-day="2" data-note="BEST PRACTICE — Expliquer le dossier research/. Quand ils commenceront a coder, c'est la qu'ils mettront leurs POCs, tests de libs, benchmarks. Pas de code de production. Chaque exploration a un README avec Contexte/Options/Decision/Justification.">
+        <div class="slide-content">
+          <span class="slide-number">J2.15</span>
+          <h1 class="slide-title">Bonne pratique : research/</h1>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Pour quand vous coderez</h3>
+              <p>"Est-ce que cette techno est la bonne ?"</p>
+              <ul style="margin-top: 1rem;">
+                <li>POCs (proof of concept)</li>
+                <li>Tests de libs / frameworks</li>
+                <li>Benchmarks performance</li>
+                <li>Explorations documentees</li>
+              </ul>
+            </div>
+            <div>
+              <pre style="font-size: 0.85rem;"><code><span class="keyword">research/</span>
+  <span class="type">cannon-vs-rapier/</span>    <span class="comment"># Flipper</span>
+    README.md           <span class="comment"># Decision documentee</span>
+  <span class="type">slam-comparison/</span>     <span class="comment"># Robot</span>
+    README.md
+  <span class="type">mqtt-vs-websocket/</span>
+    README.md</code></pre>
+              <div class="info-box warning" style="margin-top: 1rem;">
+                <div class="info-box-title">REGLE</div>
+                <p>Jamais de code de production dans <code>research/</code>. C'est un bac a sable.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- J2.16 - Ce que vous avez deja -->
-      <div class="slide" data-day="2" data-note="CLE — Faire le lien explicite entre les 2 jours de GDP et le projet. Chaque competence acquise correspond a un besoin concret du projet. Ils ne partent pas de zero.">
+      <div class="slide" data-day="2" data-note="CLE — Faire le lien explicite entre les 2 jours de GDP et le projet. Chaque competence acquise correspond a un besoin concret. Le CDC est leur feuille de route.">
         <div class="slide-content">
           <span class="slide-number">J2.16</span>
           <h1 class="slide-title">Vous avez deja les outils</h1>
@@ -2726,19 +2828,19 @@ verbe + objet</code></pre>
               </ul>
             </div>
             <div>
-              <h3>Ce que ca donne sur le projet</h3>
+              <h3>La suite du projet</h3>
               <div style="display: flex; flex-direction: column; gap: 0.8rem;">
                 <div class="kanban-card" style="padding: 0.6rem 1rem;">
-                  <p style="margin: 0;"><strong>S1</strong> — Use cases + UML du projet</p>
+                  <p style="margin: 0;"><strong>Maintenant</strong> — CDC technique v1 (fait !)</p>
                 </div>
                 <div class="kanban-card" style="padding: 0.6rem 1rem;">
-                  <p style="margin: 0;"><strong>S2-S6</strong> — Sprints avec PR + reviews</p>
+                  <p style="margin: 0;"><strong>S2-S3</strong> — POCs dans research/ + CDC v2</p>
                 </div>
                 <div class="kanban-card" style="padding: 0.6rem 1rem;">
-                  <p style="margin: 0;"><strong>S7-S8</strong> — Integration + CI</p>
+                  <p style="margin: 0;"><strong>S4-S8</strong> — Sprints dev dans apps/ avec PR + reviews</p>
                 </div>
                 <div class="kanban-card" style="padding: 0.6rem 1rem;">
-                  <p style="margin: 0;"><strong>S9-S10</strong> — Release + demo finale</p>
+                  <p style="margin: 0;"><strong>S9-S10</strong> — Integration, CI + demo finale</p>
                 </div>
               </div>
             </div>
@@ -2746,12 +2848,44 @@ verbe + objet</code></pre>
         </div>
       </div>
 
-      <!-- J2.17 - Merci -->
-      <div class="slide" data-day="2" data-note="MERCI — Fin de la formation. Questions ? Rappeler : demain on choisit les projets et on demarre.">
-        <div class="slide-content hero-slide">
+      <!-- J2.17 - Checklist finale -->
+      <div class="slide" data-day="2" data-note="CHECKLIST — Recapituler les deliverables. Chaque equipe verifie qu'elle a tout. C'est le critere de validation de ces 2 jours.">
+        <div class="slide-content">
           <span class="slide-number">J2.17</span>
+          <h1 class="slide-title">Checklist finale</h1>
+          <div class="two-col" style="margin-top: 2rem;">
+            <div>
+              <h3>Votre repo contient</h3>
+              <ul class="checklist">
+                <li><code>docs/cdc-technique.md</code> complet (9 sections)</li>
+                <li>Diagrammes UML (use case, sequence, etat)</li>
+                <li>Conventions Git documentees</li>
+                <li>Review checklist</li>
+                <li>CHANGELOG.md + tag v0.0.1</li>
+                <li>PR template fonctionnel</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Votre equipe sait</h3>
+              <ul class="checklist">
+                <li>Ecrire une vision et des use cases</li>
+                <li>Modeliser en UML</li>
+                <li>Travailler en branches + PR + review</li>
+                <li>Resoudre des conflits Git</li>
+                <li>Versionner et releaser</li>
+                <li>Compiler un CDC technique</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- J2.18 - Merci -->
+      <div class="slide" data-day="2" data-note="MERCI — Fin de la formation. Questions ? Le CDC technique v1 est pret. Place a l'implementation.">
+        <div class="slide-content hero-slide">
+          <span class="slide-number">J2.18</span>
           <h1 class="slide-title title-hero">Merci !</h1>
-          <p class="slide-subtitle" style="text-align: center; margin-top: -1rem;">Demain, on construit pour de vrai.</p>
+          <p class="slide-subtitle" style="text-align: center; margin-top: -1rem;">Votre CDC technique v1 est pret. Place a l'implementation.</p>
           <p class="author">Sion GENDERS</p>
           <p class="linkedin"><a href="https://www.linkedin.com/in/sion-gdrs/" target="_blank">linkedin.com/in/sion-gdrs</a></p>
         </div>

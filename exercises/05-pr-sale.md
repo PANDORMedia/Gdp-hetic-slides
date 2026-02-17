@@ -10,7 +10,7 @@ Analyser une PR problematique et etablir une checklist de review.
 Voici ce qui ne va pas dans cette PR :
 
 1. **1 seul commit** avec le message "wip"
-2. **Fichier modifie partout** : vision.md, 3 use cases, 2 diagrammes, le README
+2. **Fichier modifie partout** : cdc-technique.md, 2 diagrammes UML, le README, les conventions
 3. **Message de PR vague** : "update stuff"
 4. **Pas d'issue liee**
 5. **Fichiers non lies** : un `.DS_Store` traine
@@ -70,6 +70,6 @@ Par equipe, redigez `docs/review-checklist.md`.
 - "Change ca"
 
 **Bon** :
-- "Ce commit melange 2 sujets (use case + diagramme). Peux-tu separer en 2 commits ?"
-- "Le message 'wip' n'est pas assez descriptif. Suggestion : 'docs: add UC-03 assigner un ticket'"
+- "Ce commit melange 2 sujets (section CDC + diagramme). Peux-tu separer en 2 commits ?"
+- "Le message 'wip' n'est pas assez descriptif. Suggestion : 'docs: add architecture section to CDC'"
 - "Ce fichier .DS_Store ne devrait pas etre versionne. Ajoute-le au .gitignore"

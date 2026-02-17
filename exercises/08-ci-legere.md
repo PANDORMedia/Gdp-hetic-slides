@@ -1,11 +1,11 @@
 # CI legere & qualite
 
 ## Objectif
-Mettre en place un garde-fou automatique ou process.
+Mettre en place un garde-fou automatique ou process pour verifier la qualite du CDC.
 
 ## Consignes
 
-### Option A : Script lint docs (recommande)
+### Option A : Script lint CDC (recommande)
 
 Creer un script `scripts/lint-docs.sh` qui verifie :
 
@@ -15,21 +15,25 @@ set -euo pipefail
 
 errors=0
 
-# Verifier que chaque use case a les sections obligatoires
-for file in docs/use-cases/UC-*.md; do
-  if [ ! -f "$file" ]; then continue; fi
+CDC="docs/cdc-technique.md"
 
-  for section in "Acteurs" "But" "Scenario nominal"; do
-    if ! grep -q "## $section" "$file" 2>/dev/null; then
-      echo "ERREUR: $file manque la section '$section'"
+# Verifier que le CDC existe et n'est pas vide
+if [ ! -s "$CDC" ]; then
+  echo "ERREUR: $CDC est vide ou absent"
+  errors=$((errors + 1))
+else
+  # Verifier les sections obligatoires du CDC
+  for section in "## 1. Vision" "## 2. Objectifs" "## 3. Use cases" "## 4. Architecture" "## 5. Diagrammes UML"; do
+    if ! grep -q "$section" "$CDC" 2>/dev/null; then
+      echo "ERREUR: $CDC manque la section '$section'"
       errors=$((errors + 1))
     fi
   done
-done
+fi
 
-# Verifier que vision.md existe et n'est pas vide
-if [ ! -s "docs/vision.md" ]; then
-  echo "ERREUR: docs/vision.md est vide ou absent"
+# Verifier que le README existe et n'est pas vide
+if [ ! -s "README.md" ]; then
+  echo "ERREUR: README.md est vide ou absent"
   errors=$((errors + 1))
 fi
 
@@ -37,6 +41,11 @@ fi
 if find . -name ".DS_Store" | grep -q .; then
   echo "ERREUR: fichiers .DS_Store trouves"
   errors=$((errors + 1))
+fi
+
+# Verifier qu'il y a au moins 1 diagramme UML
+if [ ! -d "uml" ] || [ -z "$(ls -A uml/ 2>/dev/null)" ]; then
+  echo "ATTENTION: dossier uml/ vide — pensez a ajouter vos diagrammes"
 fi
 
 if [ $errors -eq 0 ]; then

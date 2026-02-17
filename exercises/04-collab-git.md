@@ -1,7 +1,7 @@
 # Collaboration Git : simulation
 
 ## Objectif
-Pratiquer le workflow Git en equipe avec 3 issues concretes.
+Pratiquer le workflow Git en equipe avec 3 issues concretes liees au CDC.
 
 ## Consignes
 
@@ -9,29 +9,30 @@ Pratiquer le workflow Git en equipe avec 3 issues concretes.
 
 Votre equipe doit traiter ces 3 issues :
 
-**Issue 1** : "UC-03 : assigner un ticket"
-- Ecrire le use case detaille dans `docs/use-cases/UC-03.md`
+**Issue 1** : "CDC : section architecture technique"
+- Ajouter la section 4 (Architecture) dans `docs/cdc-technique.md`
+- Decrire les composants principaux et leurs interactions
 
-**Issue 2** : "UML : sequence UC-01"
-- Creer le diagramme de sequence pour UC-01 dans `uml/`
+**Issue 2** : "UML : diagramme de sequence UC principal"
+- Creer le diagramme de sequence de votre UC le plus critique dans `uml/`
 
-**Issue 3** : "Docs : ajouter conventions commits"
-- Creer `docs/collab-git.md` avec les regles de l'equipe
+**Issue 3** : "Docs : ajouter conventions equipe"
+- Creer `docs/conventions.md` avec les regles Git et code de l'equipe
 
 ### Workflow pour chaque issue
 
 1. **Creer l'issue** sur GitHub (titre + description)
 2. **Creer la branche** : `feature/<id>-<slug>`
    ```bash
-   git checkout -b feature/1-uc03-assigner-ticket
+   git checkout -b feature/1-cdc-architecture
    ```
 3. **Commits propres** (Conventional Commits)
    ```bash
-   git commit -m "docs: add UC-03 assigner un ticket"
+   git commit -m "docs: add architecture section to CDC"
    ```
 4. **Push + PR**
    ```bash
-   git push -u origin feature/1-uc03-assigner-ticket
+   git push -u origin feature/1-cdc-architecture
    ```
 5. **Review croisee** : un autre membre review la PR
 6. **Merge** apres approbation
@@ -57,11 +58,11 @@ Message : verbe + objet ("docs: add review checklist")
 
 ## Livrable
 - 3 PR mergees
-- `docs/collab-git.md` avec les regles de votre equipe
+- `docs/conventions.md` avec les regles de votre equipe
 
 ## Aide
 
-### Template pour docs/collab-git.md
+### Template pour docs/conventions.md
 
 ```markdown
 # Conventions Git - Equipe [nom]

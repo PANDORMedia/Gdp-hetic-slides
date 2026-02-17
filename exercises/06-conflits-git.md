@@ -8,7 +8,7 @@ Creer, comprendre et resoudre un conflit Git proprement.
 ### Mise en place
 
 En binome :
-1. Choisir un fichier commun (ex: `docs/use-cases/UC-01.md`)
+1. Choisir un fichier commun (ex: `docs/cdc-technique.md`, section Architecture)
 2. Chacun cree une branche depuis `main`
 
 ```bash
@@ -23,8 +23,8 @@ git checkout -b feature/conflict-b
 
 Les deux personnes modifient la **meme section** du fichier :
 
-**Personne A** : modifie le scenario nominal (etapes 3 et 4)
-**Personne B** : modifie aussi le scenario nominal (etapes 3 et 4, differemment)
+**Personne A** : modifie la description de l'architecture (composants principaux)
+**Personne B** : modifie aussi la description de l'architecture (differemment)
 
 Chacun commit et push sa branche.
 
@@ -60,11 +60,11 @@ git push --force-with-lease origin feature/conflict-b
 
 ### Documenter
 
-Ajouter dans `docs/collab-git.md` une section "Gestion des conflits".
+Ajouter dans `docs/conventions.md` une section "Gestion des conflits".
 
 ## Livrable
 - 1 conflit resolu par equipe
-- Section ajoutee dans `docs/collab-git.md`
+- Section ajoutee dans `docs/conventions.md`
 
 ## Aide
 
@@ -74,7 +74,7 @@ Ajouter dans `docs/collab-git.md` une section "Gestion des conflits".
 2. **Discuter** : se mettre d'accord sur la version finale
 3. **Fusionner intelligemment** : parfois c'est un mix des deux
 4. **Tester** : verifier que le resultat est coherent
-5. **Committer** : message clair ("resolve conflict on UC-01 scenario")
+5. **Committer** : message clair ("resolve conflict on CDC architecture section")
 
 ### Commandes utiles
 
@@ -92,7 +92,7 @@ git diff
 git push --force-with-lease
 ```
 
-### Template pour docs/collab-git.md
+### Template pour docs/conventions.md
 
 ```markdown
 ## Gestion des conflits

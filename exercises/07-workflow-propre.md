@@ -8,10 +8,10 @@ Relier gestion de projet et Git avec des issues completes.
 ### Phase 1 : Creer 2 issues
 
 Chaque equipe choisit 2 nouvelles issues parmi :
-- Ecrire un use case manquant
+- Ajouter une section manquante au CDC (stack technique, risques, roadmap...)
 - Completer un diagramme UML
-- Ameliorer la documentation
-- Ajouter un diagramme d'etat
+- Ameliorer une section existante du CDC
+- Ajouter un diagramme d'etat ou de sequence
 
 Pour chaque issue, ajouter des **criteres d'acceptation** (DoD) :
 
@@ -20,8 +20,8 @@ Pour chaque issue, ajouter des **criteres d'acceptation** (DoD) :
 [Ce qu'il faut faire]
 
 ## Criteres d'acceptation
-- [ ] Le fichier est cree dans le bon dossier
-- [ ] Le format respecte le template
+- [ ] La section est ajoutee dans docs/cdc-technique.md
+- [ ] Le format respecte la structure du CDC
 - [ ] La PR reference cette issue
 - [ ] 1 review minimum
 ```
@@ -47,25 +47,25 @@ Pour chaque issue :
 
 ```markdown
 ## Description
-Ajout du use case UC-04 "Commenter un ticket".
+Ajout de la section "Stack technique" au CDC.
 
 ## Issue liee
 Fixes #12
 
 ## Changements
-- Nouveau fichier `docs/use-cases/UC-04.md`
-- Scenario nominal + 2 extensions
+- Nouvelle section 6 dans `docs/cdc-technique.md`
+- Justification des choix technologiques
 
 ## Comment relire
-1. Verifier la coherence avec la vision
-2. Verifier le format (template use case)
-3. Verifier que les extensions sont realistes
+1. Verifier la coherence avec l'architecture (section 4)
+2. Verifier que chaque choix est justifie
+3. Verifier que les alternatives ont ete mentionnees
 
 ## Checklist
 - [x] Issue liee
 - [x] Petit perimetre
 - [x] Commits propres
-- [x] Docs a jour
+- [x] CDC a jour
 ```
 
 ## Livrable
